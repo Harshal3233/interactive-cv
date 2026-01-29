@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit.components.v1 as components
 
 # -------------------------------------------------
 # Page Config
@@ -10,7 +9,7 @@ st.set_page_config(
 )
 
 # -------------------------------------------------
-# Brand / UI tokens (professional)
+# Brand / UI tokens
 # -------------------------------------------------
 BRAND = {
     "text": "#111827",        # slate-900
@@ -25,7 +24,7 @@ BRAND = {
 }
 
 # -------------------------------------------------
-# CSS (professional, no "cut" bars)
+# CSS
 # -------------------------------------------------
 st.markdown(
     f"""
@@ -39,16 +38,8 @@ section[data-testid="stSidebar"] > div {{
     padding-top: 1.05rem;
 }}
 h1, h2, h3 {{ letter-spacing: 0.2px; }}
-.small-muted {{
-    color: {BRAND["muted"]};
-    font-size: 0.95rem;
-}}
-.kicker {{
-    color: rgba(17, 24, 39, 0.72);
-    font-weight: 700;
-    font-size: 1.02rem;
-    margin-top: -0.25rem;
-}}
+.small-muted {{ color: {BRAND["muted"]}; font-size: 0.95rem; }}
+
 .hero {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
@@ -73,6 +64,7 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     color: {BRAND["muted"]};
     margin-top: 0.25rem;
 }}
+
 .section-title {{
     font-size: 1.35rem;
     font-weight: 900;
@@ -91,6 +83,7 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     margin-top: -0.35rem;
     margin-bottom: 0.8rem;
 }}
+
 .card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
@@ -110,6 +103,7 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     font-size: 0.95rem;
     margin-bottom: 0.55rem;
 }}
+
 .pill {{
     display: inline-block;
     padding: 0.23rem 0.62rem;
@@ -124,6 +118,7 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     background: {BRAND["note"]};
     border-color: rgba(37, 99, 235, 0.20);
 }}
+
 .side-card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
@@ -152,11 +147,13 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     border-color: rgba(17, 24, 39, 0.22);
     background: {BRAND["soft"]};
 }}
+
 .anchor {{
     height: 1px;
     margin-top: -70px;
     padding-top: 70px;
 }}
+
 /* Blog polish */
 .note-meta {{
     display: flex;
@@ -184,9 +181,54 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     padding: 0.75rem 0.85rem;
     margin-top: 0.65rem;
 }}
-.codebox pre {{
-    margin: 0;
-    font-size: 0.85rem;
+.codebox pre {{ margin: 0; font-size: 0.85rem; }}
+
+/* Experience Timeline */
+.timeline {{
+    position: relative;
+    padding-left: 1.1rem;
+}}
+.timeline::before {{
+    content: "";
+    position: absolute;
+    left: 0.36rem;
+    top: 0.2rem;
+    bottom: 0.2rem;
+    width: 2px;
+    background: rgba(17, 24, 39, 0.10);
+    border-radius: 999px;
+}}
+.t-item {{
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.9rem;
+}}
+.t-dot {{
+    position: absolute;
+    left: 0.18rem;
+    top: 0.42rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, {BRAND["accent"]}, {BRAND["accent2"]});
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+}}
+.t-card {{
+    border: 1px solid {BRAND["border"]};
+    border-radius: 18px;
+    padding: 0.95rem 1.05rem;
+    background: #ffffff;
+}}
+.t-title {{
+    font-weight: 900;
+    color: {BRAND["text"]};
+    font-size: 1.05rem;
+}}
+.t-meta {{
+    color: {BRAND["muted"]};
+    margin-top: 0.15rem;
+    margin-bottom: 0.55rem;
+    font-size: 0.93rem;
 }}
 </style>
 """,
@@ -327,7 +369,6 @@ LEARNING_NOW = [
     "Exploring LLM models and practical use cases (analysis, summarization, data assistants).",
 ]
 
-# Polished blog posts (with date, read time, tags, and small callouts)
 BLOG_NOTES = [
     {
         "title": "How SHAP helped explain model drivers",
@@ -403,6 +444,22 @@ def card_open():
 def card_close():
     st.markdown("</div>", unsafe_allow_html=True)
 
+def timeline_open():
+    st.markdown("<div class='timeline'>", unsafe_allow_html=True)
+
+def timeline_close():
+    st.markdown("</div>", unsafe_allow_html=True)
+
+def timeline_item(role, company, meta, bullets, tags):
+    st.markdown("<div class='t-item'>", unsafe_allow_html=True)
+    st.markdown("<div class='t-dot'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='t-card'>", unsafe_allow_html=True)
+    st.markdown(f"<div class='t-title'>{role} • {company}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='t-meta'>{meta}</div>", unsafe_allow_html=True)
+    st.write("\n".join([f"- {b}" for b in bullets]))
+    st.markdown(pills(tags), unsafe_allow_html=True)
+    st.markdown("</div></div>", unsafe_allow_html=True)
+
 # -------------------------------------------------
 # Sidebar
 # -------------------------------------------------
@@ -440,19 +497,13 @@ with st.sidebar:
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='side-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='side-title'>Filters</div>", unsafe_allow_html=True)
-
+    st.markdown("<div class='side-title'>Project Filter</div>", unsafe_allow_html=True)
     all_project_tags = sorted({t for p in PROJECTS for t in p["tags"]})
-    selected_project_tags = st.multiselect("Project tags", all_project_tags, default=[])
-
-    all_note_tags = sorted({t for n in BLOG_NOTES for t in n["tags"]})
-    selected_note_tags = st.multiselect("Note tags", all_note_tags, default=[])
-
-    show_previews = st.toggle("Embed live previews", value=False)
+    selected_project_tags = st.multiselect("Filter by tags", all_project_tags, default=[])
     st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Main Hero (NO top-left LinkedIn/Contact buttons here)
+# Main Hero
 # -------------------------------------------------
 st.markdown("<div class='hero'>", unsafe_allow_html=True)
 left, right = st.columns([0.70, 0.30], vertical_alignment="top")
@@ -497,17 +548,20 @@ st.write("\n".join([f"- {x}" for x in LEARNING_NOW]))
 card_close()
 
 # -------------------------------------------------
-# Experience
+# Experience Timeline
 # -------------------------------------------------
 anchor("experience")
-section("Experience", "Evidence of delivery, collaboration, and ownership.")
+section("Experience", "A timeline of roles that shaped delivery, collaboration, and ownership.")
+timeline_open()
 for e in EXPERIENCE:
-    card_open()
-    st.markdown(f"<div class='card-title'>{e['role']} • {e['company']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='card-sub'>{e['meta']}</div>", unsafe_allow_html=True)
-    st.write("\n".join([f"- {b}" for b in e["bullets"]]))
-    st.markdown(pills(e["tags"]), unsafe_allow_html=True)
-    card_close()
+    timeline_item(
+        role=e["role"],
+        company=e["company"],
+        meta=e["meta"],
+        bullets=e["bullets"],
+        tags=e["tags"],
+    )
+timeline_close()
 
 # -------------------------------------------------
 # Projects
@@ -539,38 +593,19 @@ for p in [x for x in PROJECTS if project_match(x)]:
     st.markdown("**Highlights**")
     st.write("\n".join([f"- {x}" for x in p["impact"]]))
 
-    if show_previews:
-        with st.expander("Preview live app inside this CV"):
-            components.iframe(p["live"], height=560, scrolling=True)
-
     card_close()
 
 # -------------------------------------------------
-# Blog / Notes (Polished)
+# Blog / Notes (polished)
 # -------------------------------------------------
 anchor("notes")
 section("Blog / Notes", "Short technical notes on decisions and learnings.")
-
-# Notes index (interactive)
-index_cols = st.columns([0.55, 0.45], vertical_alignment="center")
-with index_cols[0]:
-    st.markdown("<div class='small-muted'>Browse notes by tag and open the one you want.</div>", unsafe_allow_html=True)
-with index_cols[1]:
-    note_titles = [n["title"] for n in BLOG_NOTES]
-    jump_note = st.selectbox("Jump to a note", ["(Select)"] + note_titles)
-
-def note_match(n):
-    if not selected_note_tags:
-        return True
-    return any(t in n["tags"] for t in selected_note_tags)
-
-for note in [n for n in BLOG_NOTES if note_match(n)]:
+for note in BLOG_NOTES:
     card_open()
 
     st.markdown(f"<div class='card-title'>{note['title']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='card-sub'>{note['subtitle']}</div>", unsafe_allow_html=True)
 
-    # Meta row: date • read time • tags
     st.markdown(
         f"""
 <div class="note-meta">
@@ -583,7 +618,6 @@ for note in [n for n in BLOG_NOTES if note_match(n)]:
     )
     st.markdown(pills(note["tags"], accent=True), unsafe_allow_html=True)
 
-    # Compact preview
     st.write(note["body"][0])
 
     with st.expander("Read full note"):

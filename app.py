@@ -30,15 +30,16 @@ st.markdown(
     f"""
 <style>
 .block-container {{
-    padding-top: 1.3rem;
+    padding-top: 1.2rem;
     padding-bottom: 2.4rem;
-    max-width: 1200px;
+    max-width: 1220px;
 }}
 section[data-testid="stSidebar"] > div {{
     padding-top: 1.05rem;
 }}
 h1, h2, h3 {{ letter-spacing: 0.2px; }}
 .small-muted {{ color: {BRAND["muted"]}; font-size: 0.95rem; }}
+.small {{ font-size: 0.95rem; }}
 
 .hero {{
     border: 1px solid {BRAND["border"]};
@@ -73,7 +74,7 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
 }}
 .section-line {{
     height: 2px;
-    width: 92px;
+    width: 96px;
     border-radius: 999px;
     background: linear-gradient(90deg, {BRAND["accent"]}, {BRAND["accent2"]});
     margin-bottom: 0.95rem;
@@ -117,6 +118,22 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
 .pill-accent {{
     background: {BRAND["note"]};
     border-color: rgba(37, 99, 235, 0.20);
+}}
+.kpi {{
+    border: 1px solid {BRAND["border"]};
+    border-radius: 14px;
+    padding: 0.75rem 0.85rem;
+    background: #ffffff;
+}}
+.kpi-label {{
+    color: {BRAND["muted"]};
+    font-size: 0.85rem;
+    margin-bottom: 0.15rem;
+}}
+.kpi-value {{
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: {BRAND["text"]};
 }}
 
 .side-card {{
@@ -183,7 +200,7 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
 }}
 .codebox pre {{ margin: 0; font-size: 0.85rem; }}
 
-/* Experience Timeline */
+/* Timeline */
 .timeline {{
     position: relative;
     padding-left: 1.1rem;
@@ -248,55 +265,67 @@ PROFILE = {
 }
 
 ABOUT = (
-    "AI Engineer with a strong foundation in data management, predictive analysis, and model development. "
-    "I combine analytical thinking with clear communication and a product mindset: explore the data, build the model, "
-    "explain the story, and ship something usable."
+    "AI Engineer focused on turning data into decisions through analysis, modeling, explainability, and deployment. "
+    "Work is framed like a data product: define the problem, build a reliable pipeline, and ship an interface people can use."
 )
 
+# Dashboard-style experience entries: Problem → Approach → Outcome
 EXPERIENCE = [
     {
         "role": "IT & Marketing Support",
         "company": "Vinayak Infotech",
         "meta": "Ahmedabad, India • May 2024 – 2025",
-        "bullets": [
-            "Installed and configured computer systems and hardware.",
-            "Mentored software team in Java and Python (advanced and libraries) and supported testing tasks.",
-            "Streamlined marketing workflows through technical support and process improvements.",
+        "problem": "Operational teams needed reliable systems and smoother technical workflows across support and marketing execution.",
+        "approach": [
+            "Installed and configured computer systems and hardware for stable day-to-day operations.",
+            "Mentored team members in Java and Python (advanced and libraries) and supported testing tasks.",
+            "Introduced practical fixes that reduced bottlenecks in marketing workflows.",
         ],
-        "tags": ["Python", "Java", "Mentorship", "IT Support", "Process Improvement"],
+        "outcome": "Improved internal efficiency, reduced technical downtime, and enabled faster execution with clearer technical support.",
+        "signals": ["Delivery", "Mentorship", "Operations", "Workflow Efficiency"],
+        "tags": ["Python", "Java", "IT Support", "Process Improvement"],
     },
     {
         "role": "Software Engineer",
         "company": "Cignex Datamatics",
         "meta": "Gujarat, India • Aug 2022 – Jul 2023",
-        "bullets": [
-            "Developed testing scripts using Jira and collaborated with QA teams.",
-            "Resolved bugs and improved system performance for multinational clients.",
-            "Worked on Java-based systems and testing environments to enhance reliability.",
+        "problem": "Enterprise releases required stronger quality gates to minimize defects and improve stability for multinational clients.",
+        "approach": [
+            "Developed structured testing workflows using Jira and collaborated closely with QA teams.",
+            "Supported Java-based systems and improved testing consistency across environments.",
+            "Focused on early defect discovery to reduce downstream rework.",
         ],
-        "tags": ["Java", "Jira", "QA", "Client Collaboration"],
+        "outcome": "Improved release reliability and reduced post-deployment issues through stronger testing discipline and collaboration.",
+        "signals": ["Quality", "Reliability", "QA Collaboration", "Client-Facing Systems"],
+        "tags": ["Java", "Jira", "QA", "Collaboration"],
     },
     {
         "role": "Software Engineering Intern",
         "company": "Axis Ray Technology",
         "meta": "Gujarat, India • Jun 2022 – Dec 2022",
-        "bullets": [
-            "Built proficiency in Java, Advanced Java, and SQL-based data integration.",
-            "Worked on real-world projects with cross-national teams.",
-            "Supported peers through mentoring and collaborative delivery.",
+        "problem": "Projects needed consistent development support and clean data integration across teams and timelines.",
+        "approach": [
+            "Strengthened skills in Java, Advanced Java, and SQL-based integration patterns.",
+            "Worked on real-world tasks with cross-national teams and project stakeholders.",
+            "Supported peer productivity through mentoring and collaborative delivery.",
         ],
+        "outcome": "Accelerated delivery readiness by improving implementation consistency and team coordination.",
+        "signals": ["Engineering Foundations", "SQL Integration", "Team Support"],
         "tags": ["Advanced Java", "SQL", "Collaboration", "Mentorship"],
     },
     {
         "role": "Sales Executive",
         "company": "AURA ETHNICS",
         "meta": "Jan 2022 – Jun 2022",
-        "bullets": [
-            "Used Google Analytics insights to optimize online sales and customer journeys.",
-            "Improved traffic and conversions by adjusting listings and promotions.",
-            "Delivered personalized in-store customer experiences using brand storytelling.",
+        "problem": "Sales performance needed clearer visibility into customer behavior and what drives conversion.",
+        "approach": [
+            "Used Google Analytics insights to understand traffic, conversion patterns, and customer journeys.",
+            "Adjusted listings and promotions using data signals rather than guesswork.",
+            "Strengthened customer experience through product storytelling and service quality.",
         ],
-        "tags": ["Analytics", "Sales", "Customer Engagement", "Storytelling"],
+        "outcome": "Improved conversion outcomes through data-informed decision-making and stronger customer engagement.",
+        "signals": ["Analytics", "Storytelling", "Conversion Focus"],
+        "tags": ["Analytics", "Customer Engagement", "Sales"],
     },
 ]
 
@@ -306,12 +335,12 @@ PROJECTS = [
         "one_liner": "EDA + interactive mapping + SVM classifier to categorize listing prices in Rome.",
         "summary": (
             "Analyzed publicly available Rome Airbnb listings to understand pricing patterns. "
-            "Built an interactive dashboard to visualize hotspots and trained an SVM classifier to predict price categories."
+            "Built a dashboard to visualize hotspots and trained an SVM classifier to predict price categories."
         ),
-        "impact": [
-            "Identified room type + neighborhood as the strongest drivers of price.",
-            "Highlighted premium zones (Centro Storico, Trastevere) using map-based insights.",
-            "Delivered a stakeholder-friendly dashboard with clear visuals and variable explanations.",
+        "highlights": [
+            "Room type + neighborhood emerged as primary price drivers.",
+            "Premium zones (Centro Storico, Trastevere) highlighted using map-based insights.",
+            "Stakeholder-friendly dashboard with clear visuals and variable explanations.",
         ],
         "stack": ["Python (Advanced)", "EDA", "SVM", "Streamlit", "Data Storytelling"],
         "github": "https://github.com/Harshal3233/rome-airbnb-streamlit",
@@ -325,9 +354,9 @@ PROJECTS = [
             "Built an explainable ML dashboard to compare agricultural production patterns across Italy, France, Germany, and Spain. "
             "Used Random Forest as an interpretive model and SHAP to quantify feature influence transparently."
         ),
-        "impact": [
+        "highlights": [
             "Compared crop-driven vs country-driven production patterns across multiple nations.",
-            "Used SHAP to turn model decisions into stakeholder-friendly explanations.",
+            "Used SHAP to translate model behavior into stakeholder-friendly explanations.",
             "Reported MAE, Relative MAE, and R² to keep evaluation transparent and interpretable.",
         ],
         "stack": ["Python (Advanced)", "Random Forest", "SHAP", "Explainable AI", "Streamlit"],
@@ -351,39 +380,51 @@ EDUCATION = [
     {
         "title": "International Master in Data Science (Ongoing)",
         "meta": "Rome Business School | Rome, Italy",
-        "bullets": ["Hands-on projects and Oracle labs.", "Industry excursions with IBM and Owkin."],
+        "bullets": [
+            "Applied learning through Oracle labs: data workflows, database foundations, and practical analytics.",
+            "IBM labs exposure: enterprise-style problem framing, tooling practices, and real-world DS workflows.",
+            "Industry excursions with IBM and Owkin.",
+        ],
     },
     {
         "title": "B.Tech in Computer Engineering (First Class Distinction)",
         "meta": "Swarrnim Institute of Technology & Startup | Gujarat, India | 2020 – 2024",
-        "bullets": ["Debate Champion (2020–2021).", "Student Council Member (2020–2024).", "Hackathons; Blood Donation Camp (2023)."],
+        "bullets": [
+            "Debate Champion (2020–2021).",
+            "Student Council Member (2020–2024).",
+            "Hackathons; supported Blood Donation Camp organization (2023).",
+        ],
     },
 ]
 
 LANGUAGES = "English (Native/Bilingual), Hindi (Native), Italian (Basic – improving)"
 
-LEARNING_NOW = [
+EXPLORING = [
     "Embedding OpenAI into data science workflows (retrieval, prompting patterns, evaluation).",
-    "Italian language: targeting **A2** proficiency.",
-    "Model building + deployment patterns (reproducibility, packaging, app deployment).",
+    "Embeddings + semantic search for context-aware analytics and knowledge retrieval.",
+    "Model building and deployment patterns (reproducibility, packaging, monitoring mindset).",
+    "Strengthening applied skills through Oracle and IBM labs: data workflows, analytics, and DS tooling practices.",
+    "Italian language: targeting A2 proficiency for international technical environments.",
     "Exploring LLM models and practical use cases (analysis, summarization, data assistants).",
 ]
 
+# Blog: universal tone, “how it should be done”
 BLOG_NOTES = [
     {
-        "title": "How SHAP helped explain model drivers",
-        "subtitle": "Turning model behavior into stakeholder-friendly insights",
+        "title": "How SHAP explains model drivers in real decision-making",
+        "subtitle": "Interpretability as a product requirement, not a nice-to-have",
         "date": "Jan 2026",
         "read_time": "3 min read",
-        "tags": ["XAI", "SHAP", "Random Forest", "Interpretability"],
-        "body": [
-            "SHAP helped me move beyond accuracy metrics by explaining *why* a model behaves the way it does.",
-            "It made feature influence visible and comparable, especially when contrasting crop choice vs country context.",
-            "This helped translate model outputs into explanations that stakeholders can trust and act on.",
+        "tags": ["XAI", "SHAP", "Interpretability", "Random Forest"],
+        "lead": "When models influence decisions, accuracy alone is insufficient. Explainability creates trust, comparison, and accountability.",
+        "bullets": [
+            "Use SHAP to quantify feature contribution, not just rank importance.",
+            "Compare segments (countries, categories, regions) using consistent explanations.",
+            "Translate model behavior into stakeholder language: what drives outcomes and why.",
         ],
-        "callout_title": "Key takeaway",
-        "callout": "Interpretability isn’t an extra. It’s what makes models usable in real decisions.",
-        "code_title": "A simple SHAP workflow (conceptual)",
+        "callout_title": "Hard-earned lesson",
+        "callout": "Models become useful when their reasoning can be challenged, explained, and improved.",
+        "code_title": "Conceptual SHAP workflow",
         "code": """# Conceptual outline
 model = RandomForestRegressor(...)
 model.fit(X_train, y_train)
@@ -391,25 +432,29 @@ model.fit(X_train, y_train)
 explainer = shap.Explainer(model, X_train)
 shap_values = explainer(X_test)
 
-# Visualize global feature influence
-shap.plots.bar(shap_values)""",
+# Global drivers
+shap.plots.bar(shap_values)
+
+# Local explanations
+shap.plots.waterfall(shap_values[0])""",
     },
     {
-        "title": "Why I used EDA + SVM for Airbnb price categories",
-        "subtitle": "A practical modeling choice driven by the data",
+        "title": "Why EDA + SVM works well for price categories",
+        "subtitle": "Reframing the problem to make results stable and communicable",
         "date": "Jan 2026",
         "read_time": "3 min read",
         "tags": ["EDA", "SVM", "Classification", "Dashboards"],
-        "body": [
-            "EDA came first to understand price distribution shape, outliers, and neighborhood effects.",
-            "I reframed the task into price categories, making it more robust and easier to communicate.",
-            "SVM served as a strong baseline for classification, and the dashboard presented findings clearly.",
+        "lead": "Pricing problems often improve when the problem is reframed. EDA reveals distribution shifts and outliers, and SVM gives a strong, interpretable baseline.",
+        "bullets": [
+            "Start with EDA: outliers, skew, neighborhood effects, and feature leakage checks.",
+            "Bin prices into categories to stabilize targets and support clearer storytelling.",
+            "Use SVM as a strong baseline classifier before adding complexity.",
         ],
-        "callout_title": "Key takeaway",
-        "callout": "Good modeling is often reframing the problem so the output is stable and explainable.",
-        "code_title": "Baseline SVM pipeline (conceptual)",
+        "callout_title": "Hard-earned lesson",
+        "callout": "A model that stakeholders understand beats a model nobody trusts.",
+        "code_title": "Conceptual SVM pipeline",
         "code": """# Conceptual outline
-X = features  # e.g., room_type, neighborhood, capacity
+X = features
 y = price_category  # binned labels
 
 pipe = Pipeline([
@@ -438,26 +483,35 @@ def section(title: str, subtitle: str | None = None):
     if subtitle:
         st.markdown(f"<div class='section-sub'>{subtitle}</div>", unsafe_allow_html=True)
 
-def card_open():
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
-
-def card_close():
-    st.markdown("</div>", unsafe_allow_html=True)
-
 def timeline_open():
     st.markdown("<div class='timeline'>", unsafe_allow_html=True)
 
 def timeline_close():
     st.markdown("</div>", unsafe_allow_html=True)
 
-def timeline_item(role, company, meta, bullets, tags):
+def timeline_item(e):
     st.markdown("<div class='t-item'>", unsafe_allow_html=True)
     st.markdown("<div class='t-dot'></div>", unsafe_allow_html=True)
     st.markdown("<div class='t-card'>", unsafe_allow_html=True)
-    st.markdown(f"<div class='t-title'>{role} • {company}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='t-meta'>{meta}</div>", unsafe_allow_html=True)
-    st.write("\n".join([f"- {b}" for b in bullets]))
-    st.markdown(pills(tags), unsafe_allow_html=True)
+
+    st.markdown(f"<div class='t-title'>{e['role']} • {e['company']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='t-meta'>{e['meta']}</div>", unsafe_allow_html=True)
+
+    st.markdown(pills(e["signals"], accent=True), unsafe_allow_html=True)
+
+    cols = st.columns([0.34, 0.33, 0.33], vertical_alignment="top")
+    with cols[0]:
+        st.markdown("**Problem**")
+        st.write(e["problem"])
+    with cols[1]:
+        st.markdown("**Approach**")
+        st.write("\n".join([f"- {x}" for x in e["approach"]]))
+    with cols[2]:
+        st.markdown("**Outcome**")
+        st.write(e["outcome"])
+
+    st.markdown(pills(e["tags"]), unsafe_allow_html=True)
+
     st.markdown("</div></div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
@@ -482,11 +536,11 @@ with st.sidebar:
     st.markdown("<div class='side-title'>Jump to</div>", unsafe_allow_html=True)
     st.markdown(
         """
-<a class="navbtn" href="#about">About</a>
-<a class="navbtn" href="#learning">What I’m Learning Now</a>
-<a class="navbtn" href="#experience">Experience</a>
+<a class="navbtn" href="#overview">Overview</a>
+<a class="navbtn" href="#exploring">Exploring</a>
+<a class="navbtn" href="#experience">Experience Timeline</a>
 <a class="navbtn" href="#projects">Projects</a>
-<a class="navbtn" href="#notes">Blog / Notes</a>
+<a class="navbtn" href="#notes">Notes</a>
 <a class="navbtn" href="#skills">Skills</a>
 <a class="navbtn" href="#education">Education</a>
 <a class="navbtn" href="#languages">Languages</a>
@@ -499,12 +553,13 @@ with st.sidebar:
     st.markdown("<div class='side-card'>", unsafe_allow_html=True)
     st.markdown("<div class='side-title'>Project Filter</div>", unsafe_allow_html=True)
     all_project_tags = sorted({t for p in PROJECTS for t in p["tags"]})
-    selected_project_tags = st.multiselect("Filter by tags", all_project_tags, default=[])
+    selected_project_tags = st.multiselect("Filter projects by tags", all_project_tags, default=[])
     st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Main Hero
+# Hero / Overview
 # -------------------------------------------------
+anchor("overview")
 st.markdown("<div class='hero'>", unsafe_allow_html=True)
 left, right = st.columns([0.70, 0.30], vertical_alignment="top")
 
@@ -512,62 +567,43 @@ with left:
     st.markdown(f"<div class='hero-title'>{PROFILE['name']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='hero-tag'>{PROFILE['tagline']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='hero-meta'>{PROFILE['location']}</div>", unsafe_allow_html=True)
-    st.markdown("<div style='height:0.6rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.55rem;'></div>", unsafe_allow_html=True)
     st.write(ABOUT)
 
 with right:
-    st.metric("Deployed Projects", "2")
-    st.metric("Core Focus", "AI + Analytics")
-    st.metric("Availability", "Relocation")
+    st.markdown("<div class='kpi'><div class='kpi-label'>Deployed Apps</div><div class='kpi-value'>2</div></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.6rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='kpi'><div class='kpi-label'>Focus</div><div class='kpi-value'>AI + Analytics</div></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.6rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='kpi'><div class='kpi-label'>Strength</div><div class='kpi-value'>Dashboards + ML</div></div>", unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# About
+# Exploring (replaces "What I'm learning")
 # -------------------------------------------------
-anchor("about")
-section("About", "How I work: explore, model, explain, ship.")
-card_open()
-st.write(
-    "My workflow is built for clarity and delivery:"
-    "\n- **EDA first** to understand patterns, outliers, and edge cases"
-    "\n- **Modeling** with baselines and explainability when needed"
-    "\n- **Storytelling** through dashboards and clear narratives"
-    "\n- **Deployment** using reproducible repos and Streamlit apps"
-)
-st.markdown(pills(["EDA", "Predictive Analysis", "Model Building", "Deployment", "Data Storytelling"], accent=True), unsafe_allow_html=True)
-card_close()
+anchor("exploring")
+section("What’s Being Explored", "Applied labs, deployment patterns, and LLM workflows.")
+st.markdown("<div class='card'>", unsafe_allow_html=True)
+st.write("\n".join([f"- {x}" for x in EXPLORING]))
+st.markdown(pills(["Oracle Labs", "IBM Labs", "Embeddings", "LLMs", "Deployment Patterns"], accent=True), unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# What I'm Learning Now
-# -------------------------------------------------
-anchor("learning")
-section("What I’m Learning Now", "Current focus areas and upskilling.")
-card_open()
-st.write("\n".join([f"- {x}" for x in LEARNING_NOW]))
-card_close()
-
-# -------------------------------------------------
-# Experience Timeline
+# Experience Timeline (Dashboard style)
 # -------------------------------------------------
 anchor("experience")
-section("Experience", "A timeline of roles that shaped delivery, collaboration, and ownership.")
+section("Professional Experience Timeline", "Dashboard framing: Problem → Approach → Outcome.")
 timeline_open()
 for e in EXPERIENCE:
-    timeline_item(
-        role=e["role"],
-        company=e["company"],
-        meta=e["meta"],
-        bullets=e["bullets"],
-        tags=e["tags"],
-    )
+    timeline_item(e)
 timeline_close()
 
 # -------------------------------------------------
 # Projects
 # -------------------------------------------------
 anchor("projects")
-section("Projects", "Deployed apps + clean repos. Built to be clicked.")
+section("Projects", "Case-study cards: summary, highlights, and direct links.")
 
 def project_match(p):
     if not selected_project_tags:
@@ -575,7 +611,7 @@ def project_match(p):
     return any(t in p["tags"] for t in selected_project_tags)
 
 for p in [x for x in PROJECTS if project_match(x)]:
-    card_open()
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
 
     top = st.columns([0.72, 0.28], vertical_alignment="top")
     with top[0]:
@@ -591,17 +627,18 @@ for p in [x for x in PROJECTS if project_match(x)]:
     st.write(p["summary"])
 
     st.markdown("**Highlights**")
-    st.write("\n".join([f"- {x}" for x in p["impact"]]))
+    st.write("\n".join([f"- {x}" for x in p["highlights"]]))
 
-    card_close()
+    st.markdown(pills(p["tags"], accent=True), unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Blog / Notes (polished)
+# Notes (Blog) - polished, universal tone
 # -------------------------------------------------
 anchor("notes")
-section("Blog / Notes", "Short technical notes on decisions and learnings.")
+section("Notes", "Short technical notes: explainability, framing, and dashboard-first ML.")
 for note in BLOG_NOTES:
-    card_open()
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
 
     st.markdown(f"<div class='card-title'>{note['title']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='card-sub'>{note['subtitle']}</div>", unsafe_allow_html=True)
@@ -618,10 +655,10 @@ for note in BLOG_NOTES:
     )
     st.markdown(pills(note["tags"], accent=True), unsafe_allow_html=True)
 
-    st.write(note["body"][0])
+    st.write(note["lead"])
 
     with st.expander("Read full note"):
-        st.write("\n".join([f"- {x}" for x in note["body"]]))
+        st.write("\n".join([f"- {x}" for x in note["bullets"]]))
 
         st.markdown(
             f"""
@@ -633,14 +670,9 @@ for note in BLOG_NOTES:
         )
 
         st.markdown("**" + note["code_title"] + "**")
-        st.markdown(
-            f"""
-<div class="codebox"><pre>{note["code"]}</pre></div>
-""",
-            unsafe_allow_html=True,
-        )
+        st.markdown(f"<div class='codebox'><pre>{note['code']}</pre></div>", unsafe_allow_html=True)
 
-    card_close()
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
 # Skills
@@ -650,38 +682,38 @@ section("Skills", "Core stack and strengths.")
 cols = st.columns(3)
 for i, (k, items) in enumerate(SKILLS.items()):
     with cols[i]:
-        card_open()
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown(f"<div class='card-title'>{k}</div>", unsafe_allow_html=True)
         st.markdown(pills(items), unsafe_allow_html=True)
-        card_close()
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
 # Education
 # -------------------------------------------------
 anchor("education")
-section("Education", "Academic foundation and industry exposure.")
+section("Education", "Academic foundation with lab-driven skill acquisition.")
 for ed in EDUCATION:
-    card_open()
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown(f"<div class='card-title'>{ed['title']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='card-sub'>{ed['meta']}</div>", unsafe_allow_html=True)
     st.write("\n".join([f"- {b}" for b in ed["bullets"]]))
-    card_close()
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
 # Languages
 # -------------------------------------------------
 anchor("languages")
 section("Languages")
-card_open()
+st.markdown("<div class='card'>", unsafe_allow_html=True)
 st.write(LANGUAGES)
-card_close()
+st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
 # Contact
 # -------------------------------------------------
 anchor("contact")
 section("Contact")
-card_open()
+st.markdown("<div class='card'>", unsafe_allow_html=True)
 c1, c2 = st.columns([0.55, 0.45], vertical_alignment="top")
 with c1:
     st.write(f"- **Email:** {PROFILE['email']}")
@@ -691,9 +723,9 @@ with c2:
     st.link_button("Open LinkedIn", PROFILE["linkedin"], use_container_width=True)
     st.link_button("Rome Airbnb Live App", PROJECTS[0]["live"], use_container_width=True)
     st.link_button("FAO SHAP Live App", PROJECTS[1]["live"], use_container_width=True)
-card_close()
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown(
     "<div class='small-muted' style='margin-top:1.2rem;'>Built with Streamlit • Deployed on Streamlit Cloud</div>",
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )

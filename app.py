@@ -247,6 +247,18 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     margin-bottom: 0.55rem;
     font-size: 0.93rem;
 }}
+.visit {{
+    margin-top: 0.55rem;
+    padding-top: 0.25rem;
+}}
+.visit a {{
+    color: {BRAND["accent"]};
+    font-weight: 800;
+    text-decoration: none;
+}}
+.visit a:hover {{
+    text-decoration: underline;
+}}
 </style>
 """,
     unsafe_allow_html=True,
@@ -269,7 +281,6 @@ ABOUT = (
     "Work is framed like a data product: define the problem, build a reliable pipeline, and ship an interface people can use."
 )
 
-# Dashboard-style experience entries: Problem → Approach → Outcome
 EXPERIENCE = [
     {
         "role": "IT & Marketing Support",
@@ -331,23 +342,6 @@ EXPERIENCE = [
 
 PROJECTS = [
     {
-        "title": "Rome Airbnb Analysis and Price Prediction",
-        "one_liner": "EDA + interactive mapping + SVM classifier to categorize listing prices in Rome.",
-        "summary": (
-            "Analyzed publicly available Rome Airbnb listings to understand pricing patterns. "
-            "Built a dashboard to visualize hotspots and trained an SVM classifier to predict price categories."
-        ),
-        "highlights": [
-            "Room type + neighborhood emerged as primary price drivers.",
-            "Premium zones (Centro Storico, Trastevere) highlighted using map-based insights.",
-            "Stakeholder-friendly dashboard with clear visuals and variable explanations.",
-        ],
-        "stack": ["Python (Advanced)", "EDA", "SVM", "Streamlit", "Data Storytelling"],
-        "github": "https://github.com/Harshal3233/rome-airbnb-streamlit",
-        "live": "https://rome-airbnb-app-bsr6lkugduccvbrwmjfksk.streamlit.app/",
-        "tags": ["EDA", "Maps", "ML", "Streamlit"],
-    },
-    {
         "title": "Explainable ML for Agricultural Production (FAOSTAT + SHAP)",
         "one_liner": "Random Forest + SHAP to explain cross-country production drivers (crop vs country effects).",
         "summary": (
@@ -360,9 +354,24 @@ PROJECTS = [
             "Reported MAE, Relative MAE, and R² to keep evaluation transparent and interpretable.",
         ],
         "stack": ["Python (Advanced)", "Random Forest", "SHAP", "Explainable AI", "Streamlit"],
-        "github": "https://github.com/Harshal3233/fao-shap-dashboard",
-        "live": "https://fao-shap-dashboard-fyfzpqshuzcpfvz79m6xio.streamlit.app/",
+        "live": "https://fao-shap-dashboard-fyfzpqshuzcpfvz79m6xio.streamlit.app/#d166e061",
         "tags": ["XAI", "SHAP", "ML", "Streamlit"],
+    },
+    {
+        "title": "Rome Airbnb Analysis and Price Prediction",
+        "one_liner": "EDA + interactive mapping + SVM classifier to categorize listing prices in Rome.",
+        "summary": (
+            "Analyzed publicly available Rome Airbnb listings to understand pricing patterns. "
+            "Built a dashboard to visualize hotspots and trained an SVM classifier to predict price categories."
+        ),
+        "highlights": [
+            "Room type + neighborhood emerged as primary price drivers.",
+            "Premium zones (Centro Storico, Trastevere) highlighted using map-based insights.",
+            "Stakeholder-friendly dashboard with clear visuals and variable explanations.",
+        ],
+        "stack": ["Python (Advanced)", "EDA", "SVM", "Streamlit", "Data Storytelling"],
+        "live": "https://rome-airbnb-app-bsr6lkugduccvbrwmjfksk.streamlit.app/",
+        "tags": ["EDA", "Maps", "ML", "Streamlit"],
     },
 ]
 
@@ -408,7 +417,6 @@ EXPLORING = [
     "Exploring LLM models and practical use cases (analysis, summarization, data assistants).",
 ]
 
-# Blog: universal tone, “how it should be done”
 BLOG_NOTES = [
     {
         "title": "How SHAP explains model drivers in real decision-making",
@@ -511,7 +519,6 @@ def timeline_item(e):
         st.write(e["outcome"])
 
     st.markdown(pills(e["tags"]), unsafe_allow_html=True)
-
     st.markdown("</div></div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
@@ -523,13 +530,6 @@ with st.sidebar:
     st.markdown(f"**{PROFILE['name']}**", unsafe_allow_html=True)
     st.markdown(f"<div class='small-muted'>{PROFILE['tagline']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='small-muted' style='margin-top:0.35rem;'>{PROFILE['location']}</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown("<div class='side-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='side-title'>Quick Actions</div>", unsafe_allow_html=True)
-    st.link_button("LinkedIn", PROFILE["linkedin"], use_container_width=True)
-    st.link_button("Rome Airbnb Live App", PROJECTS[0]["live"], use_container_width=True)
-    st.link_button("FAO SHAP Live App", PROJECTS[1]["live"], use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='side-card'>", unsafe_allow_html=True)
@@ -548,12 +548,6 @@ with st.sidebar:
 """,
         unsafe_allow_html=True,
     )
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown("<div class='side-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='side-title'>Project Filter</div>", unsafe_allow_html=True)
-    all_project_tags = sorted({t for p in PROJECTS for t in p["tags"]})
-    selected_project_tags = st.multiselect("Filter projects by tags", all_project_tags, default=[])
     st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
@@ -580,7 +574,7 @@ with right:
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Exploring (replaces "What I'm learning")
+# Exploring
 # -------------------------------------------------
 anchor("exploring")
 section("What’s Being Explored", "Applied labs, deployment patterns, and LLM workflows.")
@@ -590,7 +584,7 @@ st.markdown(pills(["Oracle Labs", "IBM Labs", "Embeddings", "LLMs", "Deployment 
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Experience Timeline (Dashboard style)
+# Experience Timeline
 # -------------------------------------------------
 anchor("experience")
 section("Professional Experience Timeline", "Dashboard framing: Problem → Approach → Outcome.")
@@ -600,28 +594,17 @@ for e in EXPERIENCE:
 timeline_close()
 
 # -------------------------------------------------
-# Projects
+# Projects (ONLY small visit link; no GitHub, no buttons)
 # -------------------------------------------------
 anchor("projects")
-section("Projects", "Case-study cards: summary, highlights, and direct links.")
+section("Projects", "Deployed dashboards. Links kept minimal and clean.")
 
-def project_match(p):
-    if not selected_project_tags:
-        return True
-    return any(t in p["tags"] for t in selected_project_tags)
-
-for p in [x for x in PROJECTS if project_match(x)]:
+for p in PROJECTS:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
 
-    top = st.columns([0.72, 0.28], vertical_alignment="top")
-    with top[0]:
-        st.markdown(f"<div class='card-title'>{p['title']}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-sub'>{p['one_liner']}</div>", unsafe_allow_html=True)
-        st.markdown(pills(p["stack"]), unsafe_allow_html=True)
-
-    with top[1]:
-        st.link_button("Live App", p["live"], use_container_width=True)
-        st.link_button("GitHub Repo", p["github"], use_container_width=True)
+    st.markdown(f"<div class='card-title'>{p['title']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='card-sub'>{p['one_liner']}</div>", unsafe_allow_html=True)
+    st.markdown(pills(p["stack"]), unsafe_allow_html=True)
 
     st.markdown("**Summary**")
     st.write(p["summary"])
@@ -629,11 +612,16 @@ for p in [x for x in PROJECTS if project_match(x)]:
     st.markdown("**Highlights**")
     st.write("\n".join([f"- {x}" for x in p["highlights"]]))
 
-    st.markdown(pills(p["tags"], accent=True), unsafe_allow_html=True)
+    st.markdown(
+        f"<div class='visit small-muted'> <a href='{p['live']}' target='_blank'>Visit app</a> "
+        f"<span style='color:{BRAND['muted']};'>({p['live']})</span></div>",
+        unsafe_allow_html=True,
+    )
+
     st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Notes (Blog) - polished, universal tone
+# Notes
 # -------------------------------------------------
 anchor("notes")
 section("Notes", "Short technical notes: explainability, framing, and dashboard-first ML.")
@@ -714,15 +702,14 @@ st.markdown("</div>", unsafe_allow_html=True)
 anchor("contact")
 section("Contact")
 st.markdown("<div class='card'>", unsafe_allow_html=True)
-c1, c2 = st.columns([0.55, 0.45], vertical_alignment="top")
-with c1:
-    st.write(f"- **Email:** {PROFILE['email']}")
-    st.write(f"- **Phone:** {PROFILE['phone']}")
-    st.write(f"- **LinkedIn:** {PROFILE['linkedin']}")
-with c2:
-    st.link_button("Open LinkedIn", PROFILE["linkedin"], use_container_width=True)
-    st.link_button("Rome Airbnb Live App", PROJECTS[0]["live"], use_container_width=True)
-    st.link_button("FAO SHAP Live App", PROJECTS[1]["live"], use_container_width=True)
+st.write(f"- **Email:** {PROFILE['email']}")
+st.write(f"- **Phone:** {PROFILE['phone']}")
+st.write(f"- **LinkedIn:** {PROFILE['linkedin']}")
+st.markdown(
+    f"<div class='visit small-muted'>🔗 <a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn</a> "
+    f"<span style='color:{BRAND['muted']};'>({PROFILE['linkedin']})</span></div>",
+    unsafe_allow_html=True,
+)
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown(

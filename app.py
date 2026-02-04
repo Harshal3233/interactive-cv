@@ -24,28 +24,20 @@ BRAND = {
 }
 
 # -------------------------------------------------
-# CSS (UI upgrade)
+# CSS (Professional dashboard UI)
 # -------------------------------------------------
 st.markdown(
     f"""
 <style>
-/* Layout polish */
 .block-container {{
-    padding-top: 1.1rem;
-    padding-bottom: 2.4rem;
-    max-width: 1240px;
-}}
-section[data-testid="stSidebar"] > div {{
     padding-top: 1.0rem;
+    padding-bottom: 2.2rem;
+    max-width: 1280px;
 }}
-/* Remove extra top whitespace sometimes created by Streamlit */
 header[data-testid="stHeader"] {{
     background: transparent;
 }}
-/* Slightly reduce default font heaviness */
-html, body, [class*="css"] {{
-    color: {BRAND["text"]};
-}}
+.small-muted {{ color: {BRAND["muted"]}; font-size: 0.95rem; }}
 
 /* Hero */
 .hero {{
@@ -56,17 +48,17 @@ html, body, [class*="css"] {{
         radial-gradient(1100px 260px at 12% -20%, {BRAND["chip"]}, transparent 58%),
         radial-gradient(1100px 240px at 95% 0%, rgba(124, 58, 237, 0.10), transparent 55%),
         #ffffff;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
 }}
 .hero-title {{
     font-size: 2.35rem;
-    font-weight: 900;
+    font-weight: 950;
     color: {BRAND["text"]};
-    margin-bottom: 0.12rem;
+    margin-bottom: 0.10rem;
 }}
 .hero-tag {{
     font-size: 1.05rem;
-    font-weight: 800;
+    font-weight: 850;
     color: rgba(15, 23, 42, 0.78);
 }}
 .hero-meta {{
@@ -80,11 +72,11 @@ html, body, [class*="css"] {{
     flex-wrap: wrap;
 }}
 
-/* Section headings */
+/* Section */
 .section-title {{
     font-size: 1.35rem;
     font-weight: 950;
-    margin: 1.65rem 0 0.45rem 0;
+    margin: 1.55rem 0 0.45rem 0;
     color: {BRAND["text"]};
 }}
 .section-line {{
@@ -160,73 +152,16 @@ html, body, [class*="css"] {{
     color: {BRAND["text"]};
 }}
 
-/* Sidebar */
-.side-card {{
-    border: 1px solid {BRAND["border"]};
-    border-radius: 18px;
-    padding: 0.95rem 0.95rem;
-    background: #ffffff;
-    margin-bottom: 0.85rem;
-    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+/* Tab polish */
+div[data-testid="stTabs"] button {{
+    font-weight: 850 !important;
+    border-radius: 12px !important;
+    padding: 0.55rem 0.9rem !important;
 }}
-.side-title {{
-    font-weight: 950;
-    color: {BRAND["text"]};
-    margin-bottom: 0.45rem;
-    font-size: 1.02rem;
+div[data-testid="stTabs"] button[aria-selected="true"] {{
+    background: {BRAND["soft"]} !important;
+    border: 1px solid rgba(15, 23, 42, 0.16) !important;
 }}
-.small-muted {{ color: {BRAND["muted"]}; font-size: 0.95rem; }}
-
-.navbtn {{
-    display: block;
-    padding: 0.60rem 0.78rem;
-    border: 1px solid {BRAND["border"]};
-    border-radius: 12px;
-    background: #ffffff;
-    color: {BRAND["text"]};
-    font-weight: 850;
-    text-decoration: none !important;
-    margin: 0.38rem 0;
-}}
-.navbtn:hover {{
-    border-color: rgba(15, 23, 42, 0.22);
-    background: {BRAND["soft"]};
-}}
-
-.anchor {{
-    height: 1px;
-    margin-top: -74px;
-    padding-top: 74px;
-}}
-
-/* Notes / blog */
-.note-meta {{
-    display: flex;
-    gap: 0.6rem;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: 0.2rem 0 0.6rem 0;
-}}
-.meta-dot {{
-    width: 5px; height: 5px;
-    background: rgba(15,23,42,0.35);
-    border-radius: 999px;
-}}
-.callout {{
-    border: 1px solid rgba(124, 58, 237, 0.22);
-    background: {BRAND["note"]};
-    border-radius: 14px;
-    padding: 0.75rem 0.85rem;
-    margin-top: 0.6rem;
-}}
-.codebox {{
-    border: 1px solid rgba(15, 23, 42, 0.12);
-    background: {BRAND["codebg"]};
-    border-radius: 14px;
-    padding: 0.75rem 0.85rem;
-    margin-top: 0.65rem;
-}}
-.codebox pre {{ margin: 0; font-size: 0.85rem; }}
 
 /* Timeline */
 .timeline {{
@@ -308,7 +243,7 @@ PROFILE = {
 
 ABOUT = (
     "AI Engineer focused on turning data into decisions through analysis, modeling, explainability, and deployment. "
-    "Work is framed like a data product: define the problem, build a reliable pipeline, and ship an interface people can use."
+    "I build work that reads like a product: define the problem, build reliable pipelines, and ship an interface people can use."
 )
 
 EXPERIENCE = [
@@ -406,6 +341,10 @@ PROJECTS = [
 ]
 
 SKILLS = {
+    "Recruiter Snapshot": [
+        "AI Engineer", "Python (Advanced & Libraries)", "SQL", "Dashboards (Streamlit)",
+        "EDA + Modeling", "Explainability (SHAP)", "Deployment mindset",
+    ],
     "Programming & Data": [
         "Python (Advanced & Libraries)", "Advanced Java", "SQL",
         "EDA", "K-Means", "Regression", "Random Forest", "SVM", "Neural Networks",
@@ -442,8 +381,8 @@ INDUSTRY_EXCURSIONS = [
         "meta": "Rome Business School (Industry Exposure)",
         "bullets": [
             "Interactive talk with IBM lab team on the Granite model and enterprise AI workflows.",
-            "Discussion focus: integrating an LLM layer with Granite to produce more specific, context-aligned outputs for business scenarios (reducing generic responses).",
-            "Worked with cybersecurity experiments and lab exercises (security-first thinking and risk surfaces in modern systems).",
+            "Discussion: why not integrate an LLM layer with Granite to produce more specific, context-aligned outputs (reduce generic responses).",
+            "Worked with cybersecurity experiments and lab exercises (security-first thinking and risk surfaces).",
             "Explored quantum computing concepts and demonstrations relevant to next-gen computation and optimization.",
         ],
         "tags": ["IBM Granite", "LLM Integration", "Cybersecurity Labs", "Quantum Computing"],
@@ -480,7 +419,7 @@ BLOG_NOTES = [
         "lead": "When models influence decisions, accuracy alone is insufficient. Explainability creates trust, comparison, and accountability.",
         "bullets": [
             "Use SHAP to quantify feature contribution, not just rank importance.",
-            "Compare segments (countries, categories, regions) using consistent explanations.",
+            "Compare segments using consistent explanations to avoid misleading conclusions.",
             "Translate model behavior into stakeholder language: what drives outcomes and why.",
         ],
         "callout_title": "Hard-earned lesson",
@@ -493,10 +432,7 @@ model.fit(X_train, y_train)
 explainer = shap.Explainer(model, X_train)
 shap_values = explainer(X_test)
 
-# Global drivers
 shap.plots.bar(shap_values)
-
-# Local explanations
 shap.plots.waterfall(shap_values[0])""",
     },
     {
@@ -505,26 +441,25 @@ shap.plots.waterfall(shap_values[0])""",
         "date": "Jan 2026",
         "read_time": "3 min read",
         "tags": ["EDA", "SVM", "Classification", "Dashboards"],
-        "lead": "Pricing problems often improve when the problem is reframed. EDA reveals distribution shifts and outliers, and SVM gives a strong, interpretable baseline.",
+        "lead": "Pricing improves when the question is reframed. EDA reveals the story; SVM provides a strong baseline for categories.",
         "bullets": [
-            "Start with EDA: outliers, skew, neighborhood effects, and feature leakage checks.",
-            "Bin prices into categories to stabilize targets and support clearer storytelling.",
-            "Use SVM as a strong baseline classifier before adding complexity.",
+            "Start with EDA: skew, outliers, neighborhood effects, and leakage checks.",
+            "Bin prices into categories to stabilize targets and simplify the narrative.",
+            "Use SVM as a dependable baseline before adding complexity.",
         ],
         "callout_title": "Hard-earned lesson",
         "callout": "A model that stakeholders understand beats a model nobody trusts.",
         "code_title": "Conceptual SVM pipeline",
         "code": """# Conceptual outline
 X = features
-y = price_category  # binned labels
+y = price_category
 
 pipe = Pipeline([
   ("prep", preprocessor),
   ("clf", SVC(kernel="rbf"))
 ])
 
-pipe.fit(X_train, y_train)
-pred = pipe.predict(X_test)""",
+pipe.fit(X_train, y_train)""",
     },
     {
         "title": "Deployment friction: parser & Python version mismatch",
@@ -532,26 +467,24 @@ pred = pipe.predict(X_test)""",
         "date": "Jan 2026",
         "read_time": "3 min read",
         "tags": ["Deployment", "Python", "Dependencies", "Streamlit Cloud"],
-        "lead": "Deployments fail more often from environment mismatches than from code. Parser issues and Python version drift are common failure points.",
+        "lead": "Deployments fail more often from environment mismatches than from code. Parser issues and Python drift are common failure points.",
         "bullets": [
-            "Pin Python version and critical libraries to avoid dependency resolution surprises.",
-            "Reduce heavy or unused packages to keep builds lightweight and stable.",
-            "Bypass parser fragility by simplifying inputs, validating formats, and using safer parsing patterns.",
+            "Pin Python and core libraries to prevent resolution surprises.",
+            "Remove unused heavy libraries to reduce build failures.",
+            "Simplify parsing: validate input formats, use safer parsing patterns, and fall back gracefully.",
             "Treat the deployment environment as part of the system: reproducibility is a feature.",
         ],
         "callout_title": "Hard-earned lesson",
         "callout": "If a project can’t deploy consistently, it isn’t finished yet.",
         "code_title": "Conceptual fix checklist",
-        "code": """# Conceptual checklist
-# 1) Pin python version: runtime.txt (example)
+        "code": """# Pin python version (runtime.txt)
 # python-3.11
 
-# 2) Pin dependencies: requirements.txt (example)
+# Pin libs (requirements.txt)
 # streamlit==X.Y.Z
 # scikit-learn==A.B.C
 
-# 3) Remove unused heavy libs
-# 4) Validate inputs + safer parsing""",
+# Reduce heavy deps + validate inputs""",
     },
     {
         "title": "Streamlit vs Django: demo speed vs production structure",
@@ -559,32 +492,23 @@ pred = pipe.predict(X_test)""",
         "date": "Jan 2026",
         "read_time": "4 min read",
         "tags": ["Django", "Streamlit", "Architecture", "Deployment"],
-        "lead": "Different tools win at different stages. Streamlit accelerates demos, while Django supports long-term app structure when features and users grow.",
+        "lead": "Different tools win at different stages. Streamlit accelerates demos, Django supports durable product structure and growth.",
         "bullets": [
-            "Streamlit: fast UI iteration, perfect for showcasing models and dashboards quickly.",
-            "Django: stronger separation of concerns (apps/modules), durable routing, auth, and database integration.",
-            "Production Django requires deeper planning: segmentation, services, background tasks, and thorough processing pipelines.",
-            "A practical approach: Streamlit for model demos; Django for permanent products with users and operational workflows.",
+            "Streamlit: fast UI iteration for model demos and dashboards.",
+            "Django: stronger separation of concerns, routing, auth, and database integration.",
+            "Production Django requires deeper planning: segmentation, services, tasks, and thorough processing pipelines.",
+            "Practical approach: Streamlit for demos; Django for permanent products with users and operations.",
         ],
         "callout_title": "Hard-earned lesson",
         "callout": "A demo sells an idea. A production app supports a business.",
         "code_title": "Conceptual architecture contrast",
-        "code": """# Streamlit (demo-first)
+        "code": """# Streamlit: demo-first
 # app.py -> UI + light logic
 
-# Django (production-first)
-# project/
-#   apps/
-#   urls.py
-#   views.py
-#   services/
-#   models.py
-#   templates/
-#   tasks/ (Celery)
-#   tests/""",
+# Django: production-first
+# apps/ urls.py views.py services/ models.py tasks/ tests/""",
     },
 ]
-
 
 # -------------------------------------------------
 # Helpers
@@ -592,9 +516,6 @@ pred = pipe.predict(X_test)""",
 def pills(items, accent=False):
     cls = "pill pill-accent" if accent else "pill"
     return "".join([f"<span class='{cls}'>{x}</span>" for x in items])
-
-def anchor(anchor_id: str):
-    st.markdown(f"<div id='{anchor_id}' class='anchor'></div>", unsafe_allow_html=True)
 
 def section(title: str, subtitle: str | None = None):
     st.markdown(f"<div class='section-title'>{title}</div>", unsafe_allow_html=True)
@@ -608,180 +529,61 @@ def timeline_open():
 def timeline_close():
     st.markdown("</div>", unsafe_allow_html=True)
 
-def timeline_item(e):
+def timeline_item(e, technical: bool):
     st.markdown("<div class='t-item'>", unsafe_allow_html=True)
     st.markdown("<div class='t-dot'></div>", unsafe_allow_html=True)
     st.markdown("<div class='t-card'>", unsafe_allow_html=True)
 
     st.markdown(f"<div class='t-title'>{e['role']} • {e['company']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='t-meta'>{e['meta']}</div>", unsafe_allow_html=True)
-
     st.markdown(pills(e["signals"], accent=True), unsafe_allow_html=True)
 
-    cols = st.columns([0.34, 0.33, 0.33], vertical_alignment="top")
-    with cols[0]:
-        st.markdown("**Problem**")
-        st.write(e["problem"])
-    with cols[1]:
-        st.markdown("**Approach**")
-        st.write("\n".join([f"- {x}" for x in e["approach"]]))
-    with cols[2]:
-        st.markdown("**Outcome**")
-        st.write(e["outcome"])
+    # Recruiter = simpler; Technical = full dashboard layout
+    if technical:
+        cols = st.columns([0.34, 0.33, 0.33], vertical_alignment="top")
+        with cols[0]:
+            st.markdown("**Problem**")
+            st.write(e["problem"])
+        with cols[1]:
+            st.markdown("**Approach**")
+            st.write("\n".join([f"- {x}" for x in e["approach"]]))
+        with cols[2]:
+            st.markdown("**Outcome**")
+            st.write(e["outcome"])
+    else:
+        st.markdown("**Impact narrative**")
+        st.write(f"{e['problem']}  \n\n**Outcome:** {e['outcome']}")
 
     st.markdown(pills(e["tags"]), unsafe_allow_html=True)
     st.markdown("</div></div>", unsafe_allow_html=True)
 
-
-# -------------------------------------------------
-# Sidebar
-# -------------------------------------------------
-with st.sidebar:
-    st.markdown("<div class='side-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='side-title'>Profile</div>", unsafe_allow_html=True)
-    st.markdown(f"**{PROFILE['name']}**", unsafe_allow_html=True)
-    st.markdown(f"<div class='small-muted'>{PROFILE['tagline']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='small-muted' style='margin-top:0.35rem;'>{PROFILE['location']}</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown("<div class='side-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='side-title'>Quick Contact</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='small-muted'>✉️ {PROFILE['email']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='small-muted'>📞 {PROFILE['phone']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='visit small-muted'>🔗 <a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn</a></div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown("<div class='side-card'>", unsafe_allow_html=True)
-    st.markdown("<div class='side-title'>Jump to</div>", unsafe_allow_html=True)
-    st.markdown(
-        """
-<a class="navbtn" href="#overview">Overview</a>
-<a class="navbtn" href="#exploring">Exploring</a>
-<a class="navbtn" href="#experience">Experience Timeline</a>
-<a class="navbtn" href="#projects">Projects</a>
-<a class="navbtn" href="#excursions">Industry Excursions</a>
-<a class="navbtn" href="#notes">Notes</a>
-<a class="navbtn" href="#skills">Skills</a>
-<a class="navbtn" href="#education">Education</a>
-<a class="navbtn" href="#languages">Languages</a>
-<a class="navbtn" href="#contact">Contact</a>
-""",
-        unsafe_allow_html=True,
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-
-
-# -------------------------------------------------
-# Hero / Overview
-# -------------------------------------------------
-anchor("overview")
-st.markdown("<div class='hero'>", unsafe_allow_html=True)
-left, right = st.columns([0.70, 0.30], vertical_alignment="top")
-
-with left:
-    st.markdown(f"<div class='hero-title'>{PROFILE['name']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='hero-tag'>{PROFILE['tagline']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='hero-meta'>{PROFILE['location']}</div>", unsafe_allow_html=True)
-    st.markdown("<div style='height:0.55rem;'></div>", unsafe_allow_html=True)
-    st.write(ABOUT)
-    st.markdown(
-        f"""
-<div class="hero-cta">
-  <span class="pill pill-accent">AI Engineer</span>
-  <span class="pill">Dashboards</span>
-  <span class="pill">ML + Explainability</span>
-  <span class="pill">Deployment</span>
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-with right:
-    st.markdown("<div class='kpi'><div class='kpi-label'>Deployed Apps</div><div class='kpi-value'>2</div></div>", unsafe_allow_html=True)
-    st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='kpi'><div class='kpi-label'>Focus</div><div class='kpi-value'>AI + Analytics</div></div>", unsafe_allow_html=True)
-    st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='kpi'><div class='kpi-label'>Strength</div><div class='kpi-value'>Dashboards + ML</div></div>", unsafe_allow_html=True)
-
-st.markdown("</div>", unsafe_allow_html=True)
-
-
-# -------------------------------------------------
-# Exploring
-# -------------------------------------------------
-anchor("exploring")
-section("What’s Being Explored", "Applied labs, deployment patterns, and LLM workflows.")
-st.markdown("<div class='card'>", unsafe_allow_html=True)
-st.write("\n".join([f"- {x}" for x in EXPLORING]))
-st.markdown(pills(["Oracle Labs", "IBM Labs", "Embeddings", "LLMs", "Deployment Patterns"], accent=True), unsafe_allow_html=True)
-st.markdown("</div>", unsafe_allow_html=True)
-
-
-# -------------------------------------------------
-# Experience Timeline
-# -------------------------------------------------
-anchor("experience")
-section("Professional Experience Timeline", "Dashboard framing: Problem → Approach → Outcome.")
-timeline_open()
-for e in EXPERIENCE:
-    timeline_item(e)
-timeline_close()
-
-
-# -------------------------------------------------
-# Projects (ONLY small visit link; no GitHub buttons)
-# -------------------------------------------------
-anchor("projects")
-section("Projects", "Deployed dashboards. Links kept minimal and clean.")
-
-for p in PROJECTS:
+def project_card(p, technical: bool):
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-
     st.markdown(f"<div class='card-title'>{p['title']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='card-sub'>{p['one_liner']}</div>", unsafe_allow_html=True)
-    st.markdown(pills(p["stack"]), unsafe_allow_html=True)
 
-    st.markdown("**Summary**")
-    st.write(p["summary"])
-
-    st.markdown("**Highlights**")
-    st.write("\n".join([f"- {x}" for x in p["highlights"]]))
+    if technical:
+        st.markdown(pills(p["stack"]), unsafe_allow_html=True)
+        st.markdown("**Summary**")
+        st.write(p["summary"])
+        st.markdown("**Highlights**")
+        st.write("\n".join([f"- {x}" for x in p["highlights"]]))
+    else:
+        # recruiter: crisp
+        st.write(p["summary"])
+        st.markdown(pills([*p["tags"]], accent=True), unsafe_allow_html=True)
 
     st.markdown(
         f"<div class='visit small-muted'><a href='{p['live']}' target='_blank'>Visit app</a> "
         f"<span style='color:{BRAND['muted']};'>({p['live']})</span></div>",
         unsafe_allow_html=True,
     )
-
     st.markdown("</div>", unsafe_allow_html=True)
 
-
-# -------------------------------------------------
-# Industry Excursions
-# -------------------------------------------------
-anchor("excursions")
-section("Industry Excursions", "Applied exposure to enterprise AI labs and real-world research environments.")
-
-for ex in INDUSTRY_EXCURSIONS:
+def note_card(note):
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.markdown(f"<div class='card-title'>{ex['title']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='card-sub'>{ex['meta']}</div>", unsafe_allow_html=True)
-    st.write("\n".join([f"- {b}" for b in ex["bullets"]]))
-    st.markdown(pills(ex["tags"], accent=True), unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
-
-
-# -------------------------------------------------
-# Notes
-# -------------------------------------------------
-anchor("notes")
-section("Notes", "Short technical notes: explainability, framing, and deployment reality-checks.")
-for note in BLOG_NOTES:
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
-
     st.markdown(f"<div class='card-title'>{note['title']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='card-sub'>{note['subtitle']}</div>", unsafe_allow_html=True)
-
     st.markdown(
         f"""
 <div class="note-meta">
@@ -793,12 +595,9 @@ for note in BLOG_NOTES:
         unsafe_allow_html=True,
     )
     st.markdown(pills(note["tags"], accent=True), unsafe_allow_html=True)
-
     st.write(note["lead"])
-
     with st.expander("Read full note"):
         st.write("\n".join([f"- {x}" for x in note["bullets"]]))
-
         st.markdown(
             f"""
 <div class="callout">
@@ -807,60 +606,160 @@ for note in BLOG_NOTES:
 """,
             unsafe_allow_html=True,
         )
-
         st.markdown("**" + note["code_title"] + "**")
         st.markdown(f"<div class='codebox'><pre>{note['code']}</pre></div>", unsafe_allow_html=True)
-
     st.markdown("</div>", unsafe_allow_html=True)
 
+# -------------------------------------------------
+# HERO (top)
+# -------------------------------------------------
+st.markdown("<div class='hero'>", unsafe_allow_html=True)
+left, right = st.columns([0.72, 0.28], vertical_alignment="top")
+with left:
+    st.markdown(f"<div class='hero-title'>{PROFILE['name']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='hero-tag'>{PROFILE['tagline']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='hero-meta'>{PROFILE['location']}</div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.55rem;'></div>", unsafe_allow_html=True)
+    st.write(ABOUT)
+    st.markdown(
+        """
+<div class="hero-cta">
+  <span class="pill pill-accent">AI Engineer</span>
+  <span class="pill">Dashboards</span>
+  <span class="pill">ML + Explainability</span>
+  <span class="pill">Deployment</span>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+with right:
+    st.markdown("<div class='kpi'><div class='kpi-label'>Deployed Apps</div><div class='kpi-value'>2</div></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='kpi'><div class='kpi-label'>Core Stack</div><div class='kpi-value'>Python + ML</div></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='kpi'><div class='kpi-label'>Contact</div><div class='kpi-value'>LinkedIn</div></div>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Skills
+# Career Dashboard Tabs (NEW)
 # -------------------------------------------------
-anchor("skills")
-section("Skills", "Core stack and strengths.")
-cols = st.columns(3)
-for i, (k, items) in enumerate(SKILLS.items()):
-    with cols[i]:
+section("Career Dashboard", "Two views: recruiter-friendly and technical deep-dive.")
+tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
+
+# =========================
+# Recruiter View
+# =========================
+with tab_recruiter:
+    # Quick snapshot
+    c1, c2, c3 = st.columns(3)
+    with c1:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-title'>{k}</div>", unsafe_allow_html=True)
-        st.markdown(pills(items), unsafe_allow_html=True)
+        st.markdown("<div class='card-title'>Snapshot</div>", unsafe_allow_html=True)
+        st.write("AI Engineer with hands-on deployed dashboards and ML projects (Explainability + classification).")
+        st.markdown(pills(SKILLS["Recruiter Snapshot"], accent=True), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    with c2:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.markdown("<div class='card-title'>Projects</div>", unsafe_allow_html=True)
+        st.write("Two deployed apps showcasing: pricing analytics + explainable ML.")
+        st.markdown(pills(["2 Deployed Apps", "Streamlit", "ML"], accent=True), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    with c3:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.markdown("<div class='card-title'>Contact</div>", unsafe_allow_html=True)
+        st.write(f"Email: {PROFILE['email']}")
+        st.write(f"Phone: {PROFILE['phone']}")
+        st.markdown(f"<div class='visit small-muted'><a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn</a></div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
+    section("Experience", "Impact-first narrative.")
+    timeline_open()
+    for e in EXPERIENCE:
+        timeline_item(e, technical=False)
+    timeline_close()
 
-# -------------------------------------------------
-# Education
-# -------------------------------------------------
-anchor("education")
-section("Education", "Academic foundation with lab-driven skill acquisition.")
-for ed in EDUCATION:
+    section("Projects", "Simple summaries with app links.")
+    for p in PROJECTS:
+        project_card(p, technical=False)
+
+    section("Education & Industry Exposure", "Where skills were acquired and tested.")
+    for ed in EDUCATION:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card-title'>{ed['title']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card-sub'>{ed['meta']}</div>", unsafe_allow_html=True)
+        st.write("\n".join([f"- {b}" for b in ed["bullets"]]))
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    for ex in INDUSTRY_EXCURSIONS:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card-title'>{ex['title']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card-sub'>{ex['meta']}</div>", unsafe_allow_html=True)
+        st.write("\n".join([f"- {b}" for b in ex["bullets"]]))
+        st.markdown(pills(ex["tags"], accent=True), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    section("Languages", None)
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.markdown(f"<div class='card-title'>{ed['title']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='card-sub'>{ed['meta']}</div>", unsafe_allow_html=True)
-    st.write("\n".join([f"- {b}" for b in ed["bullets"]]))
+    st.write(LANGUAGES)
     st.markdown("</div>", unsafe_allow_html=True)
 
+# =========================
+# Technical View
+# =========================
+with tab_technical:
+    section("Exploration Tracks", "What’s being explored right now (LLMs, orchestration, deployment patterns).")
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.write("\n".join([f"- {x}" for x in EXPLORING]))
+    st.markdown(pills(["Oracle Labs", "IBM Labs", "Embeddings", "LLMs", "Deployment Patterns"], accent=True), unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-# -------------------------------------------------
-# Languages
-# -------------------------------------------------
-anchor("languages")
-section("Languages")
-st.markdown("<div class='card'>", unsafe_allow_html=True)
-st.write(LANGUAGES)
-st.markdown("</div>", unsafe_allow_html=True)
+    section("Experience Timeline", "Problem → Approach → Outcome (technical dashboard).")
+    timeline_open()
+    for e in EXPERIENCE:
+        timeline_item(e, technical=True)
+    timeline_close()
 
+    section("Projects", "Full detail: stack, highlights, and links.")
+    for p in PROJECTS:
+        project_card(p, technical=True)
 
-# -------------------------------------------------
-# Contact (ONLY one LinkedIn reference here)
-# -------------------------------------------------
-anchor("contact")
-section("Contact")
-st.markdown("<div class='card'>", unsafe_allow_html=True)
-st.write(f"- **Email:** {PROFILE['email']}")
-st.write(f"- **Phone:** {PROFILE['phone']}")
-st.write(f"- **LinkedIn:** {PROFILE['linkedin']}")
-st.markdown("</div>", unsafe_allow_html=True)
+    section("Industry Excursions", "Lab exposure and technical discussions.")
+    for ex in INDUSTRY_EXCURSIONS:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card-title'>{ex['title']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card-sub'>{ex['meta']}</div>", unsafe_allow_html=True)
+        st.write("\n".join([f"- {b}" for b in ex["bullets"]]))
+        st.markdown(pills(ex["tags"], accent=True), unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    section("Skills", "Toolbox view.")
+    cols = st.columns(3)
+    keys = ["Programming & Data", "Tools & Platforms", "Web & Design"]
+    for i, k in enumerate(keys):
+        with cols[i]:
+            st.markdown("<div class='card'>", unsafe_allow_html=True)
+            st.markdown(f"<div class='card-title'>{k}</div>", unsafe_allow_html=True)
+            st.markdown(pills(SKILLS[k]), unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    section("Notes", "Technical notes (explainability + deployment + architecture).")
+    for note in BLOG_NOTES:
+        note_card(note)
+
+    section("Education", "Formal learning + labs.")
+    for ed in EDUCATION:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card-title'>{ed['title']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='card-sub'>{ed['meta']}</div>", unsafe_allow_html=True)
+        st.write("\n".join([f"- {b}" for b in ed["bullets"]]))
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    section("Contact", None)
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.write(f"- **Email:** {PROFILE['email']}")
+    st.write(f"- **Phone:** {PROFILE['phone']}")
+    st.write(f"- **LinkedIn:** {PROFILE['linkedin']}")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown(
     "<div class='small-muted' style='margin-top:1.2rem;'>Built with Streamlit • Deployed on Streamlit Cloud</div>",

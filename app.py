@@ -246,6 +246,27 @@ ABOUT = (
     "I build work that reads like a product: define the problem, build reliable pipelines, and ship an interface people can use."
 )
 
+REFERENCES = [
+    {
+        "name": "Mr. Valentino Megale, PhD",
+        "role": "CEO, Softcare Studios",
+        "email": "valentinomegale@hotmail.it",
+        "linkedin": "https://www.linkedin.com/in/valentinomegale",
+    },
+    {
+        "name": "Mr. Alessandro Villadei",
+        "role": "CEO, Avor Consulting",
+        "email": "villadei.alessandro@gmail.com",
+        "linkedin": None,
+    },
+    {
+        "name": "Mr. Leandro Guerra",
+        "role": "Head of Data Science & Analytical Platforms, EMAP",
+        "email": "info@outspokenmarket.com",
+        "linkedin": None,
+    },
+]
+
 EXPERIENCE = [
     {
         "role": "IT & Marketing Support",
@@ -381,7 +402,7 @@ INDUSTRY_EXCURSIONS = [
         "meta": "Rome Business School (Industry Exposure)",
         "bullets": [
             "Interactive talk with IBM lab team on the Granite model and enterprise AI workflows.",
-            "Discussion: why not integrate an LLM layer with Granite to produce more specific, context-aligned outputs (reduce generic responses).",
+            "Discussion: integrating an LLM layer with Granite to produce more specific, context-aligned outputs (reduce generic responses).",
             "Worked with cybersecurity experiments and lab exercises (security-first thinking and risk surfaces).",
             "Explored quantum computing concepts and demonstrations relevant to next-gen computation and optimization.",
         ],
@@ -538,7 +559,6 @@ def timeline_item(e, technical: bool):
     st.markdown(f"<div class='t-meta'>{e['meta']}</div>", unsafe_allow_html=True)
     st.markdown(pills(e["signals"], accent=True), unsafe_allow_html=True)
 
-    # Recruiter = simpler; Technical = full dashboard layout
     if technical:
         cols = st.columns([0.34, 0.33, 0.33], vertical_alignment="top")
         with cols[0]:
@@ -569,7 +589,6 @@ def project_card(p, technical: bool):
         st.markdown("**Highlights**")
         st.write("\n".join([f"- {x}" for x in p["highlights"]]))
     else:
-        # recruiter: crisp
         st.write(p["summary"])
         st.markdown(pills([*p["tags"]], accent=True), unsafe_allow_html=True)
 
@@ -637,11 +656,24 @@ with right:
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
     st.markdown("<div class='kpi'><div class='kpi-label'>Core Stack</div><div class='kpi-value'>Python + ML</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='kpi'><div class='kpi-label'>Contact</div><div class='kpi-value'>LinkedIn</div></div>", unsafe_allow_html=True)
+    st.markdown(
+        f"""
+<div class='kpi'>
+  <div class='kpi-label'>Contact</div>
+  <div class='kpi-value'>
+    <a href="{PROFILE['linkedin']}" target="_blank"
+       style="text-decoration:none; color:{BRAND['accent']}; font-weight:950;">
+      LinkedIn ↗
+    </a>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Career Dashboard Tabs (NEW)
+# Career Dashboard Tabs
 # -------------------------------------------------
 section("Career Dashboard", "Two views: recruiter-friendly and technical deep-dive.")
 tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
@@ -650,26 +682,48 @@ tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
 # Recruiter View
 # =========================
 with tab_recruiter:
-    # Quick snapshot
-    c1, c2, c3 = st.columns(3)
+    c1, c2, c3, c4 = st.columns(4)
+
     with c1:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Snapshot</div>", unsafe_allow_html=True)
-        st.write("AI Engineer with hands-on deployed dashboards and ML projects (Explainability + classification).")
+        st.write("AI Engineer with deployed dashboards and ML projects (Explainability + classification).")
         st.markdown(pills(SKILLS["Recruiter Snapshot"], accent=True), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
+
     with c2:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Projects</div>", unsafe_allow_html=True)
-        st.write("Two deployed apps showcasing: pricing analytics + explainable ML.")
+        st.write("Two deployed apps showcasing pricing analytics and explainable ML.")
         st.markdown(pills(["2 Deployed Apps", "Streamlit", "ML"], accent=True), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
+
     with c3:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Contact</div>", unsafe_allow_html=True)
         st.write(f"Email: {PROFILE['email']}")
         st.write(f"Phone: {PROFILE['phone']}")
-        st.markdown(f"<div class='visit small-muted'><a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn</a></div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='visit small-muted'><a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn ↗</a></div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with c4:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.markdown("<div class='card-title'>References</div>", unsafe_allow_html=True)
+
+        for r in REFERENCES:
+            st.markdown(f"**{r['name']}**")
+            st.markdown(f"<div class='small-muted'>{r['role']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='small-muted'>✉️ {r['email']}</div>", unsafe_allow_html=True)
+
+            if r["linkedin"]:
+                st.markdown(
+                    f"<div class='visit small-muted'>🔗 "
+                    f"<a href='{r['linkedin']}' target='_blank'>LinkedIn ↗</a></div>",
+                    unsafe_allow_html=True,
+                )
+
+            st.markdown("<div style='height:0.5rem;'></div>", unsafe_allow_html=True)
+
         st.markdown("</div>", unsafe_allow_html=True)
 
     section("Experience", "Impact-first narrative.")

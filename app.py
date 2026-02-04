@@ -12,166 +12,194 @@ st.set_page_config(
 # Brand / UI tokens
 # -------------------------------------------------
 BRAND = {
-    "text": "#111827",        # slate-900
-    "muted": "#6b7280",       # gray-500
-    "border": "rgba(17, 24, 39, 0.12)",
-    "soft": "rgba(17, 24, 39, 0.04)",
+    "text": "#0f172a",        # slate-900
+    "muted": "#64748b",       # slate-500
+    "border": "rgba(15, 23, 42, 0.12)",
+    "soft": "rgba(15, 23, 42, 0.04)",
     "accent": "#2563eb",      # blue-600
     "accent2": "#7c3aed",     # violet-600
     "chip": "rgba(37, 99, 235, 0.10)",
-    "note": "rgba(37, 99, 235, 0.08)",
-    "codebg": "rgba(17, 24, 39, 0.035)",
+    "note": "rgba(124, 58, 237, 0.08)",
+    "codebg": "rgba(15, 23, 42, 0.035)",
 }
 
 # -------------------------------------------------
-# CSS
+# CSS (UI upgrade)
 # -------------------------------------------------
 st.markdown(
     f"""
 <style>
+/* Layout polish */
 .block-container {{
-    padding-top: 1.2rem;
+    padding-top: 1.1rem;
     padding-bottom: 2.4rem;
-    max-width: 1220px;
+    max-width: 1240px;
 }}
 section[data-testid="stSidebar"] > div {{
-    padding-top: 1.05rem;
+    padding-top: 1.0rem;
 }}
-h1, h2, h3 {{ letter-spacing: 0.2px; }}
-.small-muted {{ color: {BRAND["muted"]}; font-size: 0.95rem; }}
-.small {{ font-size: 0.95rem; }}
+/* Remove extra top whitespace sometimes created by Streamlit */
+header[data-testid="stHeader"] {{
+    background: transparent;
+}}
+/* Slightly reduce default font heaviness */
+html, body, [class*="css"] {{
+    color: {BRAND["text"]};
+}}
 
+/* Hero */
 .hero {{
     border: 1px solid {BRAND["border"]};
-    border-radius: 18px;
-    padding: 1.15rem 1.2rem;
+    border-radius: 20px;
+    padding: 1.25rem 1.25rem;
     background:
-        radial-gradient(1200px 220px at 18% -20%, {BRAND["chip"]}, transparent 60%),
-        radial-gradient(1200px 220px at 92% 0%, rgba(124, 58, 237, 0.10), transparent 55%),
+        radial-gradient(1100px 260px at 12% -20%, {BRAND["chip"]}, transparent 58%),
+        radial-gradient(1100px 240px at 95% 0%, rgba(124, 58, 237, 0.10), transparent 55%),
         #ffffff;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
 }}
 .hero-title {{
-    font-size: 2.25rem;
+    font-size: 2.35rem;
     font-weight: 900;
     color: {BRAND["text"]};
     margin-bottom: 0.12rem;
 }}
 .hero-tag {{
-    font-size: 1.06rem;
-    font-weight: 750;
-    color: rgba(17, 24, 39, 0.78);
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: rgba(15, 23, 42, 0.78);
 }}
 .hero-meta {{
     color: {BRAND["muted"]};
     margin-top: 0.25rem;
 }}
+.hero-cta {{
+    margin-top: 0.75rem;
+    display: inline-flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}}
 
+/* Section headings */
 .section-title {{
     font-size: 1.35rem;
-    font-weight: 900;
-    margin: 1.6rem 0 0.55rem 0;
+    font-weight: 950;
+    margin: 1.65rem 0 0.45rem 0;
     color: {BRAND["text"]};
 }}
 .section-line {{
-    height: 2px;
-    width: 96px;
+    height: 3px;
+    width: 104px;
     border-radius: 999px;
     background: linear-gradient(90deg, {BRAND["accent"]}, {BRAND["accent2"]});
-    margin-bottom: 0.95rem;
+    margin-bottom: 0.90rem;
 }}
 .section-sub {{
     color: {BRAND["muted"]};
-    margin-top: -0.35rem;
-    margin-bottom: 0.8rem;
+    margin-top: -0.30rem;
+    margin-bottom: 0.85rem;
 }}
 
+/* Cards */
 .card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
-    padding: 1.05rem 1.1rem;
+    padding: 1.05rem 1.15rem;
     background: #ffffff;
     margin-bottom: 0.95rem;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
 }}
-.card:hover {{ border-color: rgba(17, 24, 39, 0.20); }}
+.card:hover {{
+    border-color: rgba(15, 23, 42, 0.18);
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+}}
 .card-title {{
     font-size: 1.10rem;
-    font-weight: 900;
+    font-weight: 950;
     margin-bottom: 0.10rem;
     color: {BRAND["text"]};
 }}
 .card-sub {{
     color: {BRAND["muted"]};
-    font-size: 0.95rem;
+    font-size: 0.96rem;
     margin-bottom: 0.55rem;
 }}
 
+/* Pills */
 .pill {{
     display: inline-block;
-    padding: 0.23rem 0.62rem;
+    padding: 0.24rem 0.62rem;
     margin: 0.16rem 0.28rem 0.10rem 0;
     border-radius: 999px;
     border: 1px solid {BRAND["border"]};
     background: {BRAND["soft"]};
     font-size: 0.84rem;
-    color: rgba(17, 24, 39, 0.85);
+    color: rgba(15, 23, 42, 0.86);
 }}
 .pill-accent {{
     background: {BRAND["note"]};
-    border-color: rgba(37, 99, 235, 0.20);
+    border-color: rgba(124, 58, 237, 0.22);
 }}
+
+/* KPI tiles */
 .kpi {{
     border: 1px solid {BRAND["border"]};
-    border-radius: 14px;
-    padding: 0.75rem 0.85rem;
+    border-radius: 16px;
+    padding: 0.85rem 0.95rem;
     background: #ffffff;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
 }}
 .kpi-label {{
     color: {BRAND["muted"]};
-    font-size: 0.85rem;
+    font-size: 0.86rem;
     margin-bottom: 0.15rem;
 }}
 .kpi-value {{
     font-size: 1.15rem;
-    font-weight: 900;
+    font-weight: 950;
     color: {BRAND["text"]};
 }}
 
+/* Sidebar */
 .side-card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
     padding: 0.95rem 0.95rem;
     background: #ffffff;
     margin-bottom: 0.85rem;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
 }}
 .side-title {{
-    font-weight: 900;
+    font-weight: 950;
     color: {BRAND["text"]};
     margin-bottom: 0.45rem;
     font-size: 1.02rem;
 }}
+.small-muted {{ color: {BRAND["muted"]}; font-size: 0.95rem; }}
+
 .navbtn {{
     display: block;
-    padding: 0.55rem 0.75rem;
+    padding: 0.60rem 0.78rem;
     border: 1px solid {BRAND["border"]};
     border-radius: 12px;
     background: #ffffff;
     color: {BRAND["text"]};
-    font-weight: 750;
+    font-weight: 850;
     text-decoration: none !important;
-    margin: 0.35rem 0;
+    margin: 0.38rem 0;
 }}
 .navbtn:hover {{
-    border-color: rgba(17, 24, 39, 0.22);
+    border-color: rgba(15, 23, 42, 0.22);
     background: {BRAND["soft"]};
 }}
 
 .anchor {{
     height: 1px;
-    margin-top: -70px;
-    padding-top: 70px;
+    margin-top: -74px;
+    padding-top: 74px;
 }}
 
-/* Blog polish */
+/* Notes / blog */
 .note-meta {{
     display: flex;
     gap: 0.6rem;
@@ -181,18 +209,18 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
 }}
 .meta-dot {{
     width: 5px; height: 5px;
-    background: rgba(17,24,39,0.35);
+    background: rgba(15,23,42,0.35);
     border-radius: 999px;
 }}
 .callout {{
-    border: 1px solid rgba(37, 99, 235, 0.20);
+    border: 1px solid rgba(124, 58, 237, 0.22);
     background: {BRAND["note"]};
     border-radius: 14px;
     padding: 0.75rem 0.85rem;
     margin-top: 0.6rem;
 }}
 .codebox {{
-    border: 1px solid rgba(17, 24, 39, 0.12);
+    border: 1px solid rgba(15, 23, 42, 0.12);
     background: {BRAND["codebg"]};
     border-radius: 14px;
     padding: 0.75rem 0.85rem;
@@ -212,13 +240,13 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     top: 0.2rem;
     bottom: 0.2rem;
     width: 2px;
-    background: rgba(17, 24, 39, 0.10);
+    background: rgba(15, 23, 42, 0.10);
     border-radius: 999px;
 }}
 .t-item {{
     position: relative;
     padding-left: 1.25rem;
-    margin-bottom: 0.9rem;
+    margin-bottom: 0.95rem;
 }}
 .t-dot {{
     position: absolute;
@@ -228,16 +256,17 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     height: 12px;
     border-radius: 999px;
     background: linear-gradient(90deg, {BRAND["accent"]}, {BRAND["accent2"]});
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.10);
 }}
 .t-card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
     padding: 0.95rem 1.05rem;
     background: #ffffff;
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
 }}
 .t-title {{
-    font-weight: 900;
+    font-weight: 950;
     color: {BRAND["text"]};
     font-size: 1.05rem;
 }}
@@ -247,13 +276,14 @@ h1, h2, h3 {{ letter-spacing: 0.2px; }}
     margin-bottom: 0.55rem;
     font-size: 0.93rem;
 }}
+
 .visit {{
     margin-top: 0.55rem;
     padding-top: 0.25rem;
 }}
 .visit a {{
     color: {BRAND["accent"]};
-    font-weight: 800;
+    font-weight: 900;
     text-decoration: none;
 }}
 .visit a:hover {{
@@ -381,7 +411,7 @@ SKILLS = {
         "EDA", "K-Means", "Regression", "Random Forest", "SVM", "Neural Networks",
         "Data Management", "Model Building & Deployment", "Predictive Analysis",
     ],
-    "Tools & Platforms": ["Streamlit", "VS Code", "Jupyter Notebook", "GitHub", "Jira", "MS Excel", "Google Workspace"],
+    "Tools & Platforms": ["Streamlit", "VS Code", "Jupyter Notebook", "Jira", "MS Excel", "Google Workspace"],
     "Web & Design": ["HTML", "CSS", "JavaScript", "Figma", "Interactive Dashboards"],
 }
 
@@ -392,7 +422,7 @@ EDUCATION = [
         "bullets": [
             "Applied learning through Oracle labs: data workflows, database foundations, and practical analytics.",
             "IBM labs exposure: enterprise-style problem framing, tooling practices, and real-world DS workflows.",
-            "Industry excursions with IBM and Owkin.",
+            "Acquired end-to-end LLM deployment concepts: AI agent integration to satisfy user queries with concise, context-driven outputs (LLM + orchestration + evaluation mindset).",
         ],
     },
     {
@@ -403,6 +433,29 @@ EDUCATION = [
             "Student Council Member (2020–2024).",
             "Hackathons; supported Blood Donation Camp organization (2023).",
         ],
+    },
+]
+
+INDUSTRY_EXCURSIONS = [
+    {
+        "title": "IBM Industry Excursion | Enterprise AI Labs",
+        "meta": "Rome Business School (Industry Exposure)",
+        "bullets": [
+            "Interactive talk with IBM lab team on the Granite model and enterprise AI workflows.",
+            "Discussion focus: integrating an LLM layer with Granite to produce more specific, context-aligned outputs for business scenarios (reducing generic responses).",
+            "Worked with cybersecurity experiments and lab exercises (security-first thinking and risk surfaces in modern systems).",
+            "Explored quantum computing concepts and demonstrations relevant to next-gen computation and optimization.",
+        ],
+        "tags": ["IBM Granite", "LLM Integration", "Cybersecurity Labs", "Quantum Computing"],
+    },
+    {
+        "title": "Owkin Industry Excursion | AI in Healthcare",
+        "meta": "Rome Business School (Industry Exposure)",
+        "bullets": [
+            "Explored applied AI use cases and problem framing in healthcare-focused environments.",
+            "Observed how organizations operationalize ML workflows and translate insights into decisions.",
+        ],
+        "tags": ["Healthcare AI", "Applied ML", "Problem Framing"],
     },
 ]
 
@@ -473,7 +526,65 @@ pipe = Pipeline([
 pipe.fit(X_train, y_train)
 pred = pipe.predict(X_test)""",
     },
+    {
+        "title": "Deployment friction: parser & Python version mismatch",
+        "subtitle": "Stabilizing builds by pinning versions and simplifying dependencies",
+        "date": "Jan 2026",
+        "read_time": "3 min read",
+        "tags": ["Deployment", "Python", "Dependencies", "Streamlit Cloud"],
+        "lead": "Deployments fail more often from environment mismatches than from code. Parser issues and Python version drift are common failure points.",
+        "bullets": [
+            "Pin Python version and critical libraries to avoid dependency resolution surprises.",
+            "Reduce heavy or unused packages to keep builds lightweight and stable.",
+            "Bypass parser fragility by simplifying inputs, validating formats, and using safer parsing patterns.",
+            "Treat the deployment environment as part of the system: reproducibility is a feature.",
+        ],
+        "callout_title": "Hard-earned lesson",
+        "callout": "If a project can’t deploy consistently, it isn’t finished yet.",
+        "code_title": "Conceptual fix checklist",
+        "code": """# Conceptual checklist
+# 1) Pin python version: runtime.txt (example)
+# python-3.11
+
+# 2) Pin dependencies: requirements.txt (example)
+# streamlit==X.Y.Z
+# scikit-learn==A.B.C
+
+# 3) Remove unused heavy libs
+# 4) Validate inputs + safer parsing""",
+    },
+    {
+        "title": "Streamlit vs Django: demo speed vs production structure",
+        "subtitle": "Why Streamlit shines for prototypes and Django scales for permanent apps",
+        "date": "Jan 2026",
+        "read_time": "4 min read",
+        "tags": ["Django", "Streamlit", "Architecture", "Deployment"],
+        "lead": "Different tools win at different stages. Streamlit accelerates demos, while Django supports long-term app structure when features and users grow.",
+        "bullets": [
+            "Streamlit: fast UI iteration, perfect for showcasing models and dashboards quickly.",
+            "Django: stronger separation of concerns (apps/modules), durable routing, auth, and database integration.",
+            "Production Django requires deeper planning: segmentation, services, background tasks, and thorough processing pipelines.",
+            "A practical approach: Streamlit for model demos; Django for permanent products with users and operational workflows.",
+        ],
+        "callout_title": "Hard-earned lesson",
+        "callout": "A demo sells an idea. A production app supports a business.",
+        "code_title": "Conceptual architecture contrast",
+        "code": """# Streamlit (demo-first)
+# app.py -> UI + light logic
+
+# Django (production-first)
+# project/
+#   apps/
+#   urls.py
+#   views.py
+#   services/
+#   models.py
+#   templates/
+#   tasks/ (Celery)
+#   tests/""",
+    },
 ]
+
 
 # -------------------------------------------------
 # Helpers
@@ -521,6 +632,7 @@ def timeline_item(e):
     st.markdown(pills(e["tags"]), unsafe_allow_html=True)
     st.markdown("</div></div>", unsafe_allow_html=True)
 
+
 # -------------------------------------------------
 # Sidebar
 # -------------------------------------------------
@@ -533,6 +645,13 @@ with st.sidebar:
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='side-card'>", unsafe_allow_html=True)
+    st.markdown("<div class='side-title'>Quick Contact</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='small-muted'>✉️ {PROFILE['email']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='small-muted'>📞 {PROFILE['phone']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='visit small-muted'>🔗 <a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn</a></div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<div class='side-card'>", unsafe_allow_html=True)
     st.markdown("<div class='side-title'>Jump to</div>", unsafe_allow_html=True)
     st.markdown(
         """
@@ -540,6 +659,7 @@ with st.sidebar:
 <a class="navbtn" href="#exploring">Exploring</a>
 <a class="navbtn" href="#experience">Experience Timeline</a>
 <a class="navbtn" href="#projects">Projects</a>
+<a class="navbtn" href="#excursions">Industry Excursions</a>
 <a class="navbtn" href="#notes">Notes</a>
 <a class="navbtn" href="#skills">Skills</a>
 <a class="navbtn" href="#education">Education</a>
@@ -549,6 +669,7 @@ with st.sidebar:
         unsafe_allow_html=True,
     )
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 # -------------------------------------------------
 # Hero / Overview
@@ -563,15 +684,27 @@ with left:
     st.markdown(f"<div class='hero-meta'>{PROFILE['location']}</div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.55rem;'></div>", unsafe_allow_html=True)
     st.write(ABOUT)
+    st.markdown(
+        f"""
+<div class="hero-cta">
+  <span class="pill pill-accent">AI Engineer</span>
+  <span class="pill">Dashboards</span>
+  <span class="pill">ML + Explainability</span>
+  <span class="pill">Deployment</span>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
 with right:
     st.markdown("<div class='kpi'><div class='kpi-label'>Deployed Apps</div><div class='kpi-value'>2</div></div>", unsafe_allow_html=True)
-    st.markdown("<div style='height:0.6rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
     st.markdown("<div class='kpi'><div class='kpi-label'>Focus</div><div class='kpi-value'>AI + Analytics</div></div>", unsafe_allow_html=True)
-    st.markdown("<div style='height:0.6rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
     st.markdown("<div class='kpi'><div class='kpi-label'>Strength</div><div class='kpi-value'>Dashboards + ML</div></div>", unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
+
 
 # -------------------------------------------------
 # Exploring
@@ -583,6 +716,7 @@ st.write("\n".join([f"- {x}" for x in EXPLORING]))
 st.markdown(pills(["Oracle Labs", "IBM Labs", "Embeddings", "LLMs", "Deployment Patterns"], accent=True), unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)
 
+
 # -------------------------------------------------
 # Experience Timeline
 # -------------------------------------------------
@@ -593,8 +727,9 @@ for e in EXPERIENCE:
     timeline_item(e)
 timeline_close()
 
+
 # -------------------------------------------------
-# Projects (ONLY small visit link; no GitHub, no buttons)
+# Projects (ONLY small visit link; no GitHub buttons)
 # -------------------------------------------------
 anchor("projects")
 section("Projects", "Deployed dashboards. Links kept minimal and clean.")
@@ -613,18 +748,34 @@ for p in PROJECTS:
     st.write("\n".join([f"- {x}" for x in p["highlights"]]))
 
     st.markdown(
-        f"<div class='visit small-muted'> <a href='{p['live']}' target='_blank'>Visit app</a> "
+        f"<div class='visit small-muted'><a href='{p['live']}' target='_blank'>Visit app</a> "
         f"<span style='color:{BRAND['muted']};'>({p['live']})</span></div>",
         unsafe_allow_html=True,
     )
 
     st.markdown("</div>", unsafe_allow_html=True)
 
+
+# -------------------------------------------------
+# Industry Excursions
+# -------------------------------------------------
+anchor("excursions")
+section("Industry Excursions", "Applied exposure to enterprise AI labs and real-world research environments.")
+
+for ex in INDUSTRY_EXCURSIONS:
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.markdown(f"<div class='card-title'>{ex['title']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='card-sub'>{ex['meta']}</div>", unsafe_allow_html=True)
+    st.write("\n".join([f"- {b}" for b in ex["bullets"]]))
+    st.markdown(pills(ex["tags"], accent=True), unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 # -------------------------------------------------
 # Notes
 # -------------------------------------------------
 anchor("notes")
-section("Notes", "Short technical notes: explainability, framing, and dashboard-first ML.")
+section("Notes", "Short technical notes: explainability, framing, and deployment reality-checks.")
 for note in BLOG_NOTES:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
 
@@ -662,6 +813,7 @@ for note in BLOG_NOTES:
 
     st.markdown("</div>", unsafe_allow_html=True)
 
+
 # -------------------------------------------------
 # Skills
 # -------------------------------------------------
@@ -675,6 +827,7 @@ for i, (k, items) in enumerate(SKILLS.items()):
         st.markdown(pills(items), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
+
 # -------------------------------------------------
 # Education
 # -------------------------------------------------
@@ -687,6 +840,7 @@ for ed in EDUCATION:
     st.write("\n".join([f"- {b}" for b in ed["bullets"]]))
     st.markdown("</div>", unsafe_allow_html=True)
 
+
 # -------------------------------------------------
 # Languages
 # -------------------------------------------------
@@ -696,8 +850,9 @@ st.markdown("<div class='card'>", unsafe_allow_html=True)
 st.write(LANGUAGES)
 st.markdown("</div>", unsafe_allow_html=True)
 
+
 # -------------------------------------------------
-# Contact
+# Contact (ONLY one LinkedIn reference here)
 # -------------------------------------------------
 anchor("contact")
 section("Contact")
@@ -705,11 +860,6 @@ st.markdown("<div class='card'>", unsafe_allow_html=True)
 st.write(f"- **Email:** {PROFILE['email']}")
 st.write(f"- **Phone:** {PROFILE['phone']}")
 st.write(f"- **LinkedIn:** {PROFILE['linkedin']}")
-st.markdown(
-    f"<div class='visit small-muted'>🔗 <a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn</a> "
-    f"<span style='color:{BRAND['muted']};'>({PROFILE['linkedin']})</span></div>",
-    unsafe_allow_html=True,
-)
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown(

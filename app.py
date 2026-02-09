@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 
 # -------------------------------------------------
@@ -394,16 +395,17 @@ PROJECTS = [
         "title": "Smoking Project | BI + NLP + LLM Analytics",
         "one_liner": "Dashboards + data science to analyze smoking prevalence, drivers, and trends (BI + NLP/LLM).",
         "summary": (
-            "A research and analytics project focused on smoking prevalence: building clean datasets, "
-            "dashboards, and NLP/LLM workflows to summarize evidence, compare regions, and track trends."
+            "A research and analytics project focused on smoking prevalence, designed like a decision system. "
+            "It combines clean data pipelines, BI-style storytelling, and an LLM layer that can explain findings in plain language. "
+            "The goal is not just charts, but answers: what’s changing, where, and why."
         ),
         "highlights": [
             "Pipeline-ready structure: ingest → clean → model → dashboard.",
-            "Analytics focus: prevalence, segmentation, trend monitoring, and explainable drivers.",
-            "NLP/LLM layer: summarization, retrieval, and insight extraction for decision support.",
+            "BI mindset: clear KPIs, segmentation, and trend monitoring for stakeholders.",
+            "LLM integration: summarize evidence, generate insight briefs, and support Q&A over project notes.",
         ],
         "stack": ["Python", "Pandas", "Streamlit", "NLP", "LLM/NLP", "BI Dashboards"],
-        "repo": "https://github.com/YOUR_USERNAME/smoking-project",
+        "repo": None,   # ✅ no GitHub link
         "live": None,
         "tags": ["BI", "NLP", "LLM", "Dashboards"],
     },
@@ -419,7 +421,15 @@ SKILLS = {
         "EDA", "K-Means", "Regression", "Random Forest", "SVM", "Neural Networks",
         "Data Management", "Model Building & Deployment", "Predictive Analysis",
     ],
-    "Tools & Platforms": ["Streamlit", "VS Code", "Jupyter Notebook", "Jira", "MS Excel", "Google Workspace"],
+    "Tools & Platforms": [
+        "Streamlit",
+        "Power BI Desktop",  # ✅ added
+        "VS Code",
+        "Jupyter Notebook",
+        "Jira",
+        "MS Excel",
+        "Google Workspace",
+    ],
     "Web & Design": ["HTML", "CSS", "JavaScript", "Figma", "Interactive Dashboards"],
 }
 
@@ -643,6 +653,7 @@ def project_card(p, technical: bool):
         st.write(p.get("summary", ""))
         st.markdown(pills([*p.get("tags", [])], accent=True), unsafe_allow_html=True)
 
+    # Links: Live only (Repo intentionally supported but will be None for Smoking Project)
     links = []
     if p.get("repo"):
         links.append(f"<a href='{p['repo']}' target='_blank'>GitHub Repo ↗</a>")
@@ -688,6 +699,56 @@ def note_card(note):
     st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
+# OpenAI Integration (safe key handling)
+# -------------------------------------------------
+def get_openai_key() -> str | None:
+    # Prefer Streamlit secrets if set:
+    # In Streamlit Cloud: App settings -> Secrets:
+    # OPENAI_API_KEY="sk-..."
+    key = st.secrets.get("OPENAI_API_KEY", None) if hasattr(st, "secrets") else None
+    if key:
+        return key
+    # Fallback: env var
+    key = os.getenv("OPENAI_API_KEY")
+    if key:
+        return key
+    # Fallback: user-provided (not stored)
+    return None
+
+def try_openai_call(api_key: str, model: str, system: str, user_prompt: str, max_tokens: int, temperature: float):
+    """
+    Uses the modern OpenAI Python SDK style if installed (openai>=1.x).
+    If not installed, returns an error message with guidance.
+    """
+    try:
+        from openai import OpenAI  # type: ignore
+    except Exception:
+        return {"ok": False, "error": "OpenAI SDK not installed. Add `openai` to requirements.txt (e.g., openai>=1.0)."}
+    try:
+        client = OpenAI(api_key=api_key)
+        resp = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system.strip()},
+                {"role": "user", "content": user_prompt.strip()},
+            ],
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
+        text = resp.choices[0].message.content if resp.choices else ""
+        usage = getattr(resp, "usage", None)
+        usage_dict = None
+        if usage:
+            usage_dict = {
+                "prompt_tokens": getattr(usage, "prompt_tokens", None),
+                "completion_tokens": getattr(usage, "completion_tokens", None),
+                "total_tokens": getattr(usage, "total_tokens", None),
+            }
+        return {"ok": True, "text": text, "usage": usage_dict}
+    except Exception as e:
+        return {"ok": False, "error": str(e)}
+
+# -------------------------------------------------
 # HERO (top)
 # -------------------------------------------------
 st.markdown("<div class='hero'>", unsafe_allow_html=True)
@@ -713,7 +774,7 @@ with right:
     st.markdown("<div class='kpi'><div class='kpi-label'>Deployed Apps</div><div class='kpi-value'>2</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
 
-    # ✅ KPI: GitHub Projects
+    # KPI: GitHub Projects (count your repos/projects)
     st.markdown("<div class='kpi'><div class='kpi-label'>GitHub Projects</div><div class='kpi-value'>3</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
 
@@ -736,8 +797,32 @@ with right:
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
+# Sidebar: OpenAI mini-console (optional)
+# -------------------------------------------------
+with st.sidebar:
+    st.markdown("### OpenAI Integration")
+    st.caption("Add your key in Streamlit Secrets as `OPENAI_API_KEY` (recommended).")
+
+    sidebar_key = st.text_input("API Key (not saved)", type="password", value="")
+    api_key = sidebar_key.strip() if sidebar_key.strip() else get_openai_key()
+
+    model = st.selectbox("Model", ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4o"], index=0)
+    max_tokens = st.slider("Max tokens", 64, 1200, 350, 25)
+    temperature = st.slider("Temperature", 0.0, 1.2, 0.3, 0.1)
+
+    st.markdown("---")
+    st.markdown("**Token note**")
+    st.caption("Token usage shows in the result (if the API returns usage).")
+
+# -------------------------------------------------
 # Career Dashboard Tabs
 # -------------------------------------------------
+def section(title: str, subtitle: str | None = None):
+    st.markdown(f"<div class='section-title'>{title}</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-line'></div>", unsafe_allow_html=True)
+    if subtitle:
+        st.markdown(f"<div class='section-sub'>{subtitle}</div>", unsafe_allow_html=True)
+
 section("Career Dashboard", "Two views: recruiter-friendly and technical deep-dive.")
 tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
 
@@ -757,8 +842,8 @@ with tab_recruiter:
     with c2:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Projects</div>", unsafe_allow_html=True)
-        st.write("Two deployed apps showcasing pricing analytics and explainable ML.")
-        st.markdown(pills(["2 Deployed Apps", "Streamlit", "ML"], accent=True), unsafe_allow_html=True)
+        st.write("Two deployed apps showcasing pricing analytics and explainable ML, plus a research-led analytics project.")
+        st.markdown(pills(["Streamlit", "ML", "XAI", "BI/NLP"], accent=True), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c3:
@@ -795,7 +880,7 @@ with tab_recruiter:
         timeline_item(e, technical=False)
     timeline_close()
 
-    section("Projects", "Simple summaries with app links / repo.")
+    section("Projects", "Simple summaries with app links.")
     for p in PROJECTS:
         project_card(p, technical=False)
 
@@ -828,6 +913,50 @@ with tab_technical:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.write("\n".join([f"- {x}" for x in EXPLORING]))
     st.markdown(pills(["Oracle Labs", "IBM Labs", "Embeddings", "LLMs", "Deployment Patterns"], accent=True), unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    section("OpenAI Mini Console", "A lightweight demo: prompt → response → token usage (optional).")
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.write(
+        "This is a practical integration pattern: keep the key out of code, wire it via Secrets, "
+        "and expose a minimal interface for controlled queries."
+    )
+
+    system_msg = st.text_area(
+        "System instruction",
+        value="You are a helpful assistant that writes concise, context-driven answers.",
+        height=90,
+    )
+    user_msg = st.text_area(
+        "Prompt",
+        value="Summarize the Smoking Project in 5 bullet points for a stakeholder update.",
+        height=110,
+    )
+
+    run = st.button("Run OpenAI", type="primary", use_container_width=True)
+    if run:
+        if not api_key:
+            st.error("No API key found. Add `OPENAI_API_KEY` in Streamlit Secrets or paste it in the sidebar.")
+        else:
+            with st.spinner("Calling OpenAI..."):
+                out = try_openai_call(
+                    api_key=api_key,
+                    model=model,
+                    system=system_msg,
+                    user_prompt=user_msg,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                )
+            if out.get("ok"):
+                st.markdown("**Response**")
+                st.write(out.get("text", ""))
+
+                usage = out.get("usage")
+                if usage:
+                    st.markdown("**Token usage**")
+                    st.write(usage)
+            else:
+                st.error(out.get("error", "Unknown error."))
     st.markdown("</div>", unsafe_allow_html=True)
 
     section("Experience Timeline", "Problem → Approach → Outcome (technical dashboard).")

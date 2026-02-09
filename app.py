@@ -224,6 +224,35 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
 .visit a:hover {{
     text-decoration: underline;
 }}
+
+/* Notes (minimal styles referenced in note_card) */
+.note-meta {{
+  margin: 0.25rem 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}}
+.meta-dot {{
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.22);
+}}
+.callout {{
+  margin-top: 0.65rem;
+  border: 1px solid rgba(124, 58, 237, 0.22);
+  background: {BRAND["note"]};
+  padding: 0.75rem 0.85rem;
+  border-radius: 14px;
+}}
+.codebox {{
+  margin-top: 0.55rem;
+  border: 1px solid {BRAND["border"]};
+  background: {BRAND["codebg"]};
+  padding: 0.8rem 0.9rem;
+  border-radius: 14px;
+  overflow-x: auto;
+}}
 </style>
 """,
     unsafe_allow_html=True,
@@ -340,6 +369,7 @@ PROJECTS = [
             "Reported MAE, Relative MAE, and R² to keep evaluation transparent and interpretable.",
         ],
         "stack": ["Python (Advanced)", "Random Forest", "SHAP", "Explainable AI", "Streamlit"],
+        "repo": None,
         "live": "https://fao-shap-dashboard-fyfzpqshuzcpfvz79m6xio.streamlit.app/#d166e061",
         "tags": ["XAI", "SHAP", "ML", "Streamlit"],
     },
@@ -356,8 +386,26 @@ PROJECTS = [
             "Stakeholder-friendly dashboard with clear visuals and variable explanations.",
         ],
         "stack": ["Python (Advanced)", "EDA", "SVM", "Streamlit", "Data Storytelling"],
+        "repo": None,
         "live": "https://rome-airbnb-app-bsr6lkugduccvbrwmjfksk.streamlit.app/",
         "tags": ["EDA", "Maps", "ML", "Streamlit"],
+    },
+    {
+        "title": "Smoking Project | BI + NLP + LLM Analytics",
+        "one_liner": "Dashboards + data science to analyze smoking prevalence, drivers, and trends (BI + NLP/LLM).",
+        "summary": (
+            "A research and analytics project focused on smoking prevalence: building clean datasets, "
+            "dashboards, and NLP/LLM workflows to summarize evidence, compare regions, and track trends."
+        ),
+        "highlights": [
+            "Pipeline-ready structure: ingest → clean → model → dashboard.",
+            "Analytics focus: prevalence, segmentation, trend monitoring, and explainable drivers.",
+            "NLP/LLM layer: summarization, retrieval, and insight extraction for decision support.",
+        ],
+        "stack": ["Python", "Pandas", "Streamlit", "NLP", "LLM/NLP", "BI Dashboards"],
+        "repo": "https://github.com/YOUR_USERNAME/smoking-project",
+        "live": None,
+        "tags": ["BI", "NLP", "LLM", "Dashboards"],
     },
 ]
 
@@ -583,20 +631,30 @@ def project_card(p, technical: bool):
     st.markdown(f"<div class='card-sub'>{p['one_liner']}</div>", unsafe_allow_html=True)
 
     if technical:
-        st.markdown(pills(p["stack"]), unsafe_allow_html=True)
+        st.markdown(pills(p.get("stack", [])), unsafe_allow_html=True)
         st.markdown("**Summary**")
-        st.write(p["summary"])
-        st.markdown("**Highlights**")
-        st.write("\n".join([f"- {x}" for x in p["highlights"]]))
-    else:
-        st.write(p["summary"])
-        st.markdown(pills([*p["tags"]], accent=True), unsafe_allow_html=True)
+        st.write(p.get("summary", ""))
 
-    st.markdown(
-        f"<div class='visit small-muted'><a href='{p['live']}' target='_blank'>Visit app</a> "
-        f"<span style='color:{BRAND['muted']};'>({p['live']})</span></div>",
-        unsafe_allow_html=True,
-    )
+        highlights = p.get("highlights", [])
+        if highlights:
+            st.markdown("**Highlights**")
+            st.write("\n".join([f"- {x}" for x in highlights]))
+    else:
+        st.write(p.get("summary", ""))
+        st.markdown(pills([*p.get("tags", [])], accent=True), unsafe_allow_html=True)
+
+    links = []
+    if p.get("repo"):
+        links.append(f"<a href='{p['repo']}' target='_blank'>GitHub Repo ↗</a>")
+    if p.get("live"):
+        links.append(f"<a href='{p['live']}' target='_blank'>Visit app ↗</a>")
+
+    if links:
+        st.markdown(
+            f"<div class='visit small-muted'>{' &nbsp; • &nbsp; '.join(links)}</div>",
+            unsafe_allow_html=True,
+        )
+
     st.markdown("</div>", unsafe_allow_html=True)
 
 def note_card(note):
@@ -654,6 +712,11 @@ with left:
 with right:
     st.markdown("<div class='kpi'><div class='kpi-label'>Deployed Apps</div><div class='kpi-value'>2</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
+
+    # ✅ KPI: GitHub Projects
+    st.markdown("<div class='kpi'><div class='kpi-label'>GitHub Projects</div><div class='kpi-value'>3</div></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
+
     st.markdown("<div class='kpi'><div class='kpi-label'>Core Stack</div><div class='kpi-value'>Python + ML</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
     st.markdown(
@@ -732,7 +795,7 @@ with tab_recruiter:
         timeline_item(e, technical=False)
     timeline_close()
 
-    section("Projects", "Simple summaries with app links.")
+    section("Projects", "Simple summaries with app links / repo.")
     for p in PROJECTS:
         project_card(p, technical=False)
 

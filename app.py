@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 
 # -------------------------------------------------
@@ -25,14 +24,71 @@ BRAND = {
 }
 
 # -------------------------------------------------
-# CSS (Professional dashboard UI)
+# Sidebar Controls (Interactive)
 # -------------------------------------------------
+with st.sidebar:
+    st.markdown("## Controls")
+    st.caption("Tune the UI, filter content, and switch focus instantly.")
+
+    # A “slider line” vibe (gradient bar)
+    st.markdown(
+        f"""
+        <div style="
+            height: 10px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, {BRAND['accent']}, {BRAND['accent2']});
+            margin: 0.25rem 0 0.9rem 0;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10);
+        "></div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    focus = st.radio(
+        "Focus Mode",
+        ["Recruiter-first", "Technical-first"],
+        index=0,
+        help="Changes the default tab and highlights.",
+    )
+
+    density = st.slider(
+        "Layout Density",
+        0.85, 1.15, 1.0, 0.01,
+        help="Controls padding and spacing. Higher = roomier.",
+    )
+
+    elevation = st.slider(
+        "Card Elevation",
+        0.0, 1.0, 0.55, 0.01,
+        help="Controls card shadow intensity.",
+    )
+
+    st.markdown("---")
+    st.markdown("### Project Filters")
+    project_search = st.text_input("Search projects", value="", placeholder="e.g., SHAP, Streamlit, BI...")
+
+    # A quick tag filter
+    tag_filter = st.multiselect(
+        "Filter by tag",
+        options=["XAI", "SHAP", "ML", "Streamlit", "EDA", "Maps", "BI", "NLP", "LLM", "Dashboards"],
+        default=[],
+    )
+
+# -------------------------------------------------
+# CSS (Professional dashboard UI) + interactive vars
+# -------------------------------------------------
+# These get injected from sidebar sliders to feel interactive.
+shadow_strength = 0.04 + (elevation * 0.06)  # 0.04 -> 0.10
+hover_shadow = 0.06 + (elevation * 0.08)     # 0.06 -> 0.14
+pad_top = 1.0 * density
+pad_bottom = 2.2 * density
+
 st.markdown(
     f"""
 <style>
 .block-container {{
-    padding-top: 1.0rem;
-    padding-bottom: 2.2rem;
+    padding-top: {pad_top}rem;
+    padding-bottom: {pad_bottom}rem;
     max-width: 1280px;
 }}
 header[data-testid="stHeader"] {{
@@ -44,7 +100,7 @@ header[data-testid="stHeader"] {{
 .hero {{
     border: 1px solid {BRAND["border"]};
     border-radius: 20px;
-    padding: 1.25rem 1.25rem;
+    padding: {1.25 * density}rem {1.25 * density}rem;
     background:
         radial-gradient(1100px 260px at 12% -20%, {BRAND["chip"]}, transparent 58%),
         radial-gradient(1100px 240px at 95% 0%, rgba(124, 58, 237, 0.10), transparent 55%),
@@ -77,7 +133,7 @@ header[data-testid="stHeader"] {{
 .section-title {{
     font-size: 1.35rem;
     font-weight: 950;
-    margin: 1.55rem 0 0.45rem 0;
+    margin: {1.55 * density}rem 0 0.45rem 0;
     color: {BRAND["text"]};
 }}
 .section-line {{
@@ -97,14 +153,16 @@ header[data-testid="stHeader"] {{
 .card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
-    padding: 1.05rem 1.15rem;
+    padding: {1.05 * density}rem {1.15 * density}rem;
     background: #ffffff;
-    margin-bottom: 0.95rem;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    margin-bottom: {0.95 * density}rem;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, {shadow_strength});
+    transition: 0.18s ease;
 }}
 .card:hover {{
     border-color: rgba(15, 23, 42, 0.18);
-    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 32px rgba(15, 23, 42, {hover_shadow});
 }}
 .card-title {{
     font-size: 1.10rem;
@@ -138,9 +196,9 @@ header[data-testid="stHeader"] {{
 .kpi {{
     border: 1px solid {BRAND["border"]};
     border-radius: 16px;
-    padding: 0.85rem 0.95rem;
+    padding: {0.85 * density}rem {0.95 * density}rem;
     background: #ffffff;
-    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, {shadow_strength});
 }}
 .kpi-label {{
     color: {BRAND["muted"]};
@@ -182,7 +240,7 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
 .t-item {{
     position: relative;
     padding-left: 1.25rem;
-    margin-bottom: 0.95rem;
+    margin-bottom: {0.95 * density}rem;
 }}
 .t-dot {{
     position: absolute;
@@ -197,9 +255,9 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
 .t-card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
-    padding: 0.95rem 1.05rem;
+    padding: {0.95 * density}rem {1.05 * density}rem;
     background: #ffffff;
-    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, {shadow_strength});
 }}
 .t-title {{
     font-weight: 950;
@@ -226,7 +284,7 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
     text-decoration: underline;
 }}
 
-/* Notes (minimal styles referenced in note_card) */
+/* Notes */
 .note-meta {{
   margin: 0.25rem 0 0.5rem 0;
   display: flex;
@@ -395,17 +453,18 @@ PROJECTS = [
         "title": "Smoking Project | BI + NLP + LLM Analytics",
         "one_liner": "Dashboards + data science to analyze smoking prevalence, drivers, and trends (BI + NLP/LLM).",
         "summary": (
-            "A research and analytics project focused on smoking prevalence, designed like a decision system. "
-            "It combines clean data pipelines, BI-style storytelling, and an LLM layer that can explain findings in plain language. "
-            "The goal is not just charts, but answers: what’s changing, where, and why."
+            "A research and analytics project built like a decision engine: clean data pipelines, BI-style KPIs, "
+            "and an applied NLP/LLM workflow. I worked with OpenAI-style prompt patterns (keys, tokens, rate limits, "
+            "and safe secret handling) to turn evidence and project notes into concise stakeholder-ready summaries. "
+            "The outcome is not only charts, but explainable narratives: what’s changing, where, and why."
         ),
         "highlights": [
             "Pipeline-ready structure: ingest → clean → model → dashboard.",
             "BI mindset: clear KPIs, segmentation, and trend monitoring for stakeholders.",
-            "LLM integration: summarize evidence, generate insight briefs, and support Q&A over project notes.",
+            "LLM/NLP experience: prompt patterns, token budgeting, and secret-handling practices (implementation-ready).",
         ],
         "stack": ["Python", "Pandas", "Streamlit", "NLP", "LLM/NLP", "BI Dashboards"],
-        "repo": None,   # ✅ no GitHub link
+        "repo": None,   # no GitHub link
         "live": None,
         "tags": ["BI", "NLP", "LLM", "Dashboards"],
     },
@@ -423,7 +482,7 @@ SKILLS = {
     ],
     "Tools & Platforms": [
         "Streamlit",
-        "Power BI Desktop",  # ✅ added
+        "Power BI Desktop",
         "VS Code",
         "Jupyter Notebook",
         "Jira",
@@ -653,16 +712,10 @@ def project_card(p, technical: bool):
         st.write(p.get("summary", ""))
         st.markdown(pills([*p.get("tags", [])], accent=True), unsafe_allow_html=True)
 
-    # Links: Live only (Repo intentionally supported but will be None for Smoking Project)
-    links = []
-    if p.get("repo"):
-        links.append(f"<a href='{p['repo']}' target='_blank'>GitHub Repo ↗</a>")
     if p.get("live"):
-        links.append(f"<a href='{p['live']}' target='_blank'>Visit app ↗</a>")
-
-    if links:
         st.markdown(
-            f"<div class='visit small-muted'>{' &nbsp; • &nbsp; '.join(links)}</div>",
+            f"<div class='visit small-muted'><a href='{p['live']}' target='_blank'>Visit app ↗</a> "
+            f"<span style='color:{BRAND['muted']};'>({p['live']})</span></div>",
             unsafe_allow_html=True,
         )
 
@@ -699,54 +752,32 @@ def note_card(note):
     st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# OpenAI Integration (safe key handling)
+# Apply sidebar project filters
 # -------------------------------------------------
-def get_openai_key() -> str | None:
-    # Prefer Streamlit secrets if set:
-    # In Streamlit Cloud: App settings -> Secrets:
-    # OPENAI_API_KEY="sk-..."
-    key = st.secrets.get("OPENAI_API_KEY", None) if hasattr(st, "secrets") else None
-    if key:
-        return key
-    # Fallback: env var
-    key = os.getenv("OPENAI_API_KEY")
-    if key:
-        return key
-    # Fallback: user-provided (not stored)
-    return None
+def project_matches(p: dict) -> bool:
+    # text search
+    q = project_search.strip().lower()
+    if q:
+        blob = " ".join([
+            p.get("title", ""),
+            p.get("one_liner", ""),
+            p.get("summary", ""),
+            " ".join(p.get("tags", [])),
+            " ".join(p.get("stack", [])),
+        ]).lower()
+        if q not in blob:
+            return False
 
-def try_openai_call(api_key: str, model: str, system: str, user_prompt: str, max_tokens: int, temperature: float):
-    """
-    Uses the modern OpenAI Python SDK style if installed (openai>=1.x).
-    If not installed, returns an error message with guidance.
-    """
-    try:
-        from openai import OpenAI  # type: ignore
-    except Exception:
-        return {"ok": False, "error": "OpenAI SDK not installed. Add `openai` to requirements.txt (e.g., openai>=1.0)."}
-    try:
-        client = OpenAI(api_key=api_key)
-        resp = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": system.strip()},
-                {"role": "user", "content": user_prompt.strip()},
-            ],
-            max_tokens=max_tokens,
-            temperature=temperature,
-        )
-        text = resp.choices[0].message.content if resp.choices else ""
-        usage = getattr(resp, "usage", None)
-        usage_dict = None
-        if usage:
-            usage_dict = {
-                "prompt_tokens": getattr(usage, "prompt_tokens", None),
-                "completion_tokens": getattr(usage, "completion_tokens", None),
-                "total_tokens": getattr(usage, "total_tokens", None),
-            }
-        return {"ok": True, "text": text, "usage": usage_dict}
-    except Exception as e:
-        return {"ok": False, "error": str(e)}
+    # tag filter
+    if tag_filter:
+        tags = set([t.lower() for t in p.get("tags", [])])
+        wanted = set([t.lower() for t in tag_filter])
+        if tags.isdisjoint(wanted):
+            return False
+
+    return True
+
+FILTERED_PROJECTS = [p for p in PROJECTS if project_matches(p)]
 
 # -------------------------------------------------
 # HERO (top)
@@ -773,11 +804,8 @@ with left:
 with right:
     st.markdown("<div class='kpi'><div class='kpi-label'>Deployed Apps</div><div class='kpi-value'>2</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
-
-    # KPI: GitHub Projects (count your repos/projects)
     st.markdown("<div class='kpi'><div class='kpi-label'>GitHub Projects</div><div class='kpi-value'>3</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
-
     st.markdown("<div class='kpi'><div class='kpi-label'>Core Stack</div><div class='kpi-value'>Python + ML</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
     st.markdown(
@@ -797,34 +825,15 @@ with right:
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Sidebar: OpenAI mini-console (optional)
-# -------------------------------------------------
-with st.sidebar:
-    st.markdown("### OpenAI Integration")
-    st.caption("Add your key in Streamlit Secrets as `OPENAI_API_KEY` (recommended).")
-
-    sidebar_key = st.text_input("API Key (not saved)", type="password", value="")
-    api_key = sidebar_key.strip() if sidebar_key.strip() else get_openai_key()
-
-    model = st.selectbox("Model", ["gpt-4o-mini", "gpt-4.1-mini", "gpt-4o"], index=0)
-    max_tokens = st.slider("Max tokens", 64, 1200, 350, 25)
-    temperature = st.slider("Temperature", 0.0, 1.2, 0.3, 0.1)
-
-    st.markdown("---")
-    st.markdown("**Token note**")
-    st.caption("Token usage shows in the result (if the API returns usage).")
-
-# -------------------------------------------------
 # Career Dashboard Tabs
 # -------------------------------------------------
-def section(title: str, subtitle: str | None = None):
-    st.markdown(f"<div class='section-title'>{title}</div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-line'></div>", unsafe_allow_html=True)
-    if subtitle:
-        st.markdown(f"<div class='section-sub'>{subtitle}</div>", unsafe_allow_html=True)
-
 section("Career Dashboard", "Two views: recruiter-friendly and technical deep-dive.")
 tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
+
+# Default focus behavior (soft)
+if focus == "Technical-first":
+    # Show a small hint (Streamlit tabs cannot be programmatically selected reliably)
+    st.info("Tip: You selected Technical-first in the sidebar. Open the **Technical View** tab for the deep dive.")
 
 # =========================
 # Recruiter View
@@ -842,8 +851,8 @@ with tab_recruiter:
     with c2:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Projects</div>", unsafe_allow_html=True)
-        st.write("Two deployed apps showcasing pricing analytics and explainable ML, plus a research-led analytics project.")
-        st.markdown(pills(["Streamlit", "ML", "XAI", "BI/NLP"], accent=True), unsafe_allow_html=True)
+        st.write("Deployed apps + research-led analytics (BI/NLP/LLM experience).")
+        st.markdown(pills(["2 Deployed Apps", "Streamlit", "ML", "BI/NLP"], accent=True), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c3:
@@ -880,8 +889,10 @@ with tab_recruiter:
         timeline_item(e, technical=False)
     timeline_close()
 
-    section("Projects", "Simple summaries with app links.")
-    for p in PROJECTS:
+    section("Projects", "Simple summaries with app links (filtered from sidebar).")
+    if not FILTERED_PROJECTS:
+        st.warning("No projects match your filters. Try clearing search/tags in the sidebar.")
+    for p in FILTERED_PROJECTS:
         project_card(p, technical=False)
 
     section("Education & Industry Exposure", "Where skills were acquired and tested.")
@@ -915,58 +926,16 @@ with tab_technical:
     st.markdown(pills(["Oracle Labs", "IBM Labs", "Embeddings", "LLMs", "Deployment Patterns"], accent=True), unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-    section("OpenAI Mini Console", "A lightweight demo: prompt → response → token usage (optional).")
-    st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.write(
-        "This is a practical integration pattern: keep the key out of code, wire it via Secrets, "
-        "and expose a minimal interface for controlled queries."
-    )
-
-    system_msg = st.text_area(
-        "System instruction",
-        value="You are a helpful assistant that writes concise, context-driven answers.",
-        height=90,
-    )
-    user_msg = st.text_area(
-        "Prompt",
-        value="Summarize the Smoking Project in 5 bullet points for a stakeholder update.",
-        height=110,
-    )
-
-    run = st.button("Run OpenAI", type="primary", use_container_width=True)
-    if run:
-        if not api_key:
-            st.error("No API key found. Add `OPENAI_API_KEY` in Streamlit Secrets or paste it in the sidebar.")
-        else:
-            with st.spinner("Calling OpenAI..."):
-                out = try_openai_call(
-                    api_key=api_key,
-                    model=model,
-                    system=system_msg,
-                    user_prompt=user_msg,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                )
-            if out.get("ok"):
-                st.markdown("**Response**")
-                st.write(out.get("text", ""))
-
-                usage = out.get("usage")
-                if usage:
-                    st.markdown("**Token usage**")
-                    st.write(usage)
-            else:
-                st.error(out.get("error", "Unknown error."))
-    st.markdown("</div>", unsafe_allow_html=True)
-
     section("Experience Timeline", "Problem → Approach → Outcome (technical dashboard).")
     timeline_open()
     for e in EXPERIENCE:
         timeline_item(e, technical=True)
     timeline_close()
 
-    section("Projects", "Full detail: stack, highlights, and links.")
-    for p in PROJECTS:
+    section("Projects", "Full detail: stack, highlights, and links (filtered from sidebar).")
+    if not FILTERED_PROJECTS:
+        st.warning("No projects match your filters. Try clearing search/tags in the sidebar.")
+    for p in FILTERED_PROJECTS:
         project_card(p, technical=True)
 
     section("Industry Excursions", "Lab exposure and technical discussions.")

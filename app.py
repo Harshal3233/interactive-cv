@@ -1,6 +1,4 @@
 import streamlit as st
-import numpy as np
-import matplotlib.pyplot as plt
 
 # -------------------------------------------------
 # Page Config
@@ -232,7 +230,14 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
     text-decoration: underline;
 }}
 
-/* Notes code blocks wrap */
+/* Notes */
+.codebox {{
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: {BRAND["codebg"]};
+    border-radius: 14px;
+    padding: 0.75rem 0.85rem;
+    margin-top: 0.65rem;
+}}
 .codebox pre {{
   white-space: pre-wrap;
   word-break: break-word;
@@ -245,13 +250,6 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
     border-radius: 14px;
     padding: 0.75rem 0.85rem;
     margin-top: 0.6rem;
-}}
-.codebox {{
-    border: 1px solid rgba(15, 23, 42, 0.12);
-    background: {BRAND["codebg"]};
-    border-radius: 14px;
-    padding: 0.75rem 0.85rem;
-    margin-top: 0.65rem;
 }}
 .note-meta {{
     display: flex;
@@ -287,15 +285,13 @@ ABOUT = (
     "I build work like a product: define the problem, build reliable pipelines, and ship an interface people can use."
 )
 
-# References (ONLY Prof. Valentino as requested)
-REFERENCES = [
-    {
-        "name": "Mr. Valentino Megale, PhD",
-        "role": "CEO, Softcare Studios",
-        "email": "valentinomegale@hotmail.it",
-        "linkedin": "https://www.linkedin.com/in/valentinomegale",
-    }
-]
+# ONLY Prof. Valentino (as requested)
+REFERENCE = {
+    "name": "Mr. Valentino Megale, PhD",
+    "role": "CEO, Softcare Studios",
+    "email": "valentinomegale@hotmail.it",
+    "linkedin": "https://www.linkedin.com/in/valentinomegale",
+}
 
 EXPERIENCE = [
     {
@@ -401,7 +397,7 @@ PROJECTS = [
         "highlights": [
             "A-to-Z workflow mindset: data → analysis → insight narrative → future deployment paths.",
             "Exploring LLM/NLP patterns to turn signals into usable summaries and explanations.",
-            "Built as a foundation for a BI-style, decision-support dashboard.",
+            "Built as a foundation for a BI-style decision-support dashboard.",
         ],
         "stack": ["Python (Advanced)", "NLP", "LLMs", "Analytics", "BI mindset"],
         "link_label": "View repository",
@@ -677,35 +673,8 @@ def note_card(note):
         st.markdown(f"<div class='codebox'><pre>{note['code']}</pre></div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-def delivery_radar():
-    labels = [
-        "SQL", "Data (CSV/API)", "Cleaning", "EDA", "Feature Eng",
-        "Modeling", "Evaluation", "Explainability", "Dashboard UI", "Deployment"
-    ]
-    scores = np.array([8, 8, 7, 8, 7, 8, 7, 8, 9, 8], dtype=float)
-
-    angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False)
-    scores_loop = np.concatenate([scores, [scores[0]]])
-    angles_loop = np.concatenate([angles, [angles[0]]])
-
-    fig = plt.figure(figsize=(5.0, 3.8), dpi=140)
-    ax = plt.subplot(111, polar=True)
-
-    ax.plot(angles_loop, scores_loop, linewidth=2)
-    ax.fill(angles_loop, scores_loop, alpha=0.12)
-
-    ax.set_xticks(angles)
-    ax.set_xticklabels(labels, fontsize=7)
-    ax.set_yticks([2, 4, 6, 8, 10])
-    ax.set_yticklabels(["2", "4", "6", "8", "10"], fontsize=7)
-    ax.set_ylim(0, 10)
-    ax.grid(alpha=0.25)
-    ax.set_title("A→Z Data Science Delivery", fontsize=10, pad=12, fontweight="bold")
-    fig.tight_layout()
-    return fig
-
 # -------------------------------------------------
-# HERO (top)
+# HERO
 # -------------------------------------------------
 st.markdown("<div class='hero'>", unsafe_allow_html=True)
 left, right = st.columns([0.72, 0.28], vertical_alignment="top")
@@ -750,11 +719,10 @@ with right:
 """,
         unsafe_allow_html=True,
     )
-
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Explore My Work (Header + graph + tabs)
+# Explore My Work (graph without matplotlib)
 # -------------------------------------------------
 section("Explore My Work", "Two views: recruiter-friendly and technical deep-dive.")
 
@@ -764,14 +732,30 @@ with hleft:
     st.markdown("<div class='card-title'>End-to-end delivery mindset</div>", unsafe_allow_html=True)
     st.write(
         "A full data science project isn’t just modeling. It’s a pipeline: data acquisition → analysis → modeling → "
-        "explainability → dashboard UX → deployment. This dashboard shows that delivery flow clearly."
+        "explainability → dashboard UX → deployment. This dashboard is built to show the whole delivery chain."
     )
-    st.markdown(pills(["SQL", "EDA", "Modeling", "Explainability", "Dashboard UX", "Deployment"], accent=True), unsafe_allow_html=True)
+    st.markdown(pills(["SQL", "CSV/API", "EDA", "Modeling", "Explainability", "Dashboard UX", "Deployment"], accent=True), unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 with hright:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.pyplot(delivery_radar(), clear_figure=True)
+    st.markdown("<div class='card-title'>A→Z Project Delivery</div>", unsafe_allow_html=True)
+
+    # Streamlit-native "skill pipeline" chart (no extra libs)
+    pipeline = {
+        "SQL": 8,
+        "CSV/API": 8,
+        "Cleaning": 7,
+        "EDA": 8,
+        "Feature Eng": 7,
+        "Modeling": 8,
+        "Evaluation": 7,
+        "Explainability": 8,
+        "Dashboard UI": 9,
+        "Deployment": 8,
+    }
+    st.line_chart(pipeline, height=210)
+    st.markdown("<div class='small-muted'>Signal chart (0–10): capability across the full delivery pipeline.</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
@@ -780,7 +764,6 @@ tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
 # Recruiter View
 # =========================
 with tab_recruiter:
-    # Auto-adjust layout: keep it clean
     c1, c2, c3, c4 = st.columns([1.05, 1.05, 1.05, 0.95])
 
     with c1:
@@ -811,12 +794,11 @@ with tab_recruiter:
     with c4:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Reference</div>", unsafe_allow_html=True)
-        r = REFERENCES[0]
-        st.markdown(f"**{r['name']}**")
-        st.markdown(f"<div class='small-muted'>{r['role']}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='small-muted'>✉️ {r['email']}</div>", unsafe_allow_html=True)
+        st.markdown(f"**{REFERENCE['name']}**")
+        st.markdown(f"<div class='small-muted'>{REFERENCE['role']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='small-muted'>✉️ {REFERENCE['email']}</div>", unsafe_allow_html=True)
         st.markdown(
-            f"<div class='visit small-muted'>🔗 <a href='{r['linkedin']}' target='_blank'>LinkedIn ↗</a></div>",
+            f"<div class='visit small-muted'>🔗 <a href='{REFERENCE['linkedin']}' target='_blank'>LinkedIn ↗</a></div>",
             unsafe_allow_html=True,
         )
         st.markdown("</div>", unsafe_allow_html=True)

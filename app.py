@@ -1,4 +1,6 @@
 import streamlit as st
+import numpy as np
+import matplotlib.pyplot as plt
 
 # -------------------------------------------------
 # Page Config
@@ -24,71 +26,19 @@ BRAND = {
 }
 
 # -------------------------------------------------
-# Sidebar Controls (Interactive)
+# CSS (Professional dashboard UI + overflow fixes)
 # -------------------------------------------------
-with st.sidebar:
-    st.markdown("## Controls")
-    st.caption("Tune the UI, filter content, and switch focus instantly.")
-
-    # A “slider line” vibe (gradient bar)
-    st.markdown(
-        f"""
-        <div style="
-            height: 10px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, {BRAND['accent']}, {BRAND['accent2']});
-            margin: 0.25rem 0 0.9rem 0;
-            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10);
-        "></div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    focus = st.radio(
-        "Focus Mode",
-        ["Recruiter-first", "Technical-first"],
-        index=0,
-        help="Changes the default tab and highlights.",
-    )
-
-    density = st.slider(
-        "Layout Density",
-        0.85, 1.15, 1.0, 0.01,
-        help="Controls padding and spacing. Higher = roomier.",
-    )
-
-    elevation = st.slider(
-        "Card Elevation",
-        0.0, 1.0, 0.55, 0.01,
-        help="Controls card shadow intensity.",
-    )
-
-    st.markdown("---")
-    st.markdown("### Project Filters")
-    project_search = st.text_input("Search projects", value="", placeholder="e.g., SHAP, Streamlit, BI...")
-
-    # A quick tag filter
-    tag_filter = st.multiselect(
-        "Filter by tag",
-        options=["XAI", "SHAP", "ML", "Streamlit", "EDA", "Maps", "BI", "NLP", "LLM", "Dashboards"],
-        default=[],
-    )
-
-# -------------------------------------------------
-# CSS (Professional dashboard UI) + interactive vars
-# -------------------------------------------------
-# These get injected from sidebar sliders to feel interactive.
-shadow_strength = 0.04 + (elevation * 0.06)  # 0.04 -> 0.10
-hover_shadow = 0.06 + (elevation * 0.08)     # 0.06 -> 0.14
-pad_top = 1.0 * density
-pad_bottom = 2.2 * density
-
 st.markdown(
     f"""
 <style>
+/* Prevent horizontal scrollbars (the "2 sliders" issue) */
+html, body {{ overflow-x: hidden; }}
+* {{ box-sizing: border-box; }}
+a, p, div, span {{ overflow-wrap: anywhere; word-break: break-word; }}
+
 .block-container {{
-    padding-top: {pad_top}rem;
-    padding-bottom: {pad_bottom}rem;
+    padding-top: 1.0rem;
+    padding-bottom: 2.2rem;
     max-width: 1280px;
 }}
 header[data-testid="stHeader"] {{
@@ -100,7 +50,7 @@ header[data-testid="stHeader"] {{
 .hero {{
     border: 1px solid {BRAND["border"]};
     border-radius: 20px;
-    padding: {1.25 * density}rem {1.25 * density}rem;
+    padding: 1.25rem 1.25rem;
     background:
         radial-gradient(1100px 260px at 12% -20%, {BRAND["chip"]}, transparent 58%),
         radial-gradient(1100px 240px at 95% 0%, rgba(124, 58, 237, 0.10), transparent 55%),
@@ -133,7 +83,7 @@ header[data-testid="stHeader"] {{
 .section-title {{
     font-size: 1.35rem;
     font-weight: 950;
-    margin: {1.55 * density}rem 0 0.45rem 0;
+    margin: 1.55rem 0 0.45rem 0;
     color: {BRAND["text"]};
 }}
 .section-line {{
@@ -153,16 +103,14 @@ header[data-testid="stHeader"] {{
 .card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
-    padding: {1.05 * density}rem {1.15 * density}rem;
+    padding: 1.05rem 1.15rem;
     background: #ffffff;
-    margin-bottom: {0.95 * density}rem;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, {shadow_strength});
-    transition: 0.18s ease;
+    margin-bottom: 0.95rem;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
 }}
 .card:hover {{
     border-color: rgba(15, 23, 42, 0.18);
-    transform: translateY(-1px);
-    box-shadow: 0 14px 32px rgba(15, 23, 42, {hover_shadow});
+    box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
 }}
 .card-title {{
     font-size: 1.10rem;
@@ -196,9 +144,9 @@ header[data-testid="stHeader"] {{
 .kpi {{
     border: 1px solid {BRAND["border"]};
     border-radius: 16px;
-    padding: {0.85 * density}rem {0.95 * density}rem;
+    padding: 0.85rem 0.95rem;
     background: #ffffff;
-    box-shadow: 0 10px 22px rgba(15, 23, 42, {shadow_strength});
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
 }}
 .kpi-label {{
     color: {BRAND["muted"]};
@@ -240,7 +188,7 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
 .t-item {{
     position: relative;
     padding-left: 1.25rem;
-    margin-bottom: {0.95 * density}rem;
+    margin-bottom: 0.95rem;
 }}
 .t-dot {{
     position: absolute;
@@ -255,9 +203,9 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
 .t-card {{
     border: 1px solid {BRAND["border"]};
     border-radius: 18px;
-    padding: {0.95 * density}rem {1.05 * density}rem;
+    padding: 0.95rem 1.05rem;
     background: #ffffff;
-    box-shadow: 0 10px 22px rgba(15, 23, 42, {shadow_strength});
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
 }}
 .t-title {{
     font-weight: 950;
@@ -284,33 +232,38 @@ div[data-testid="stTabs"] button[aria-selected="true"] {{
     text-decoration: underline;
 }}
 
-/* Notes */
-.note-meta {{
-  margin: 0.25rem 0 0.5rem 0;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}}
-.meta-dot {{
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.22);
+/* Notes code blocks wrap */
+.codebox pre {{
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  font-size: 0.85rem;
 }}
 .callout {{
-  margin-top: 0.65rem;
-  border: 1px solid rgba(124, 58, 237, 0.22);
-  background: {BRAND["note"]};
-  padding: 0.75rem 0.85rem;
-  border-radius: 14px;
+    border: 1px solid rgba(124, 58, 237, 0.22);
+    background: {BRAND["note"]};
+    border-radius: 14px;
+    padding: 0.75rem 0.85rem;
+    margin-top: 0.6rem;
 }}
 .codebox {{
-  margin-top: 0.55rem;
-  border: 1px solid {BRAND["border"]};
-  background: {BRAND["codebg"]};
-  padding: 0.8rem 0.9rem;
-  border-radius: 14px;
-  overflow-x: auto;
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    background: {BRAND["codebg"]};
+    border-radius: 14px;
+    padding: 0.75rem 0.85rem;
+    margin-top: 0.65rem;
+}}
+.note-meta {{
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0.2rem 0 0.6rem 0;
+}}
+.meta-dot {{
+    width: 5px; height: 5px;
+    background: rgba(15,23,42,0.35);
+    border-radius: 999px;
 }}
 </style>
 """,
@@ -331,28 +284,17 @@ PROFILE = {
 
 ABOUT = (
     "AI Engineer focused on turning data into decisions through analysis, modeling, explainability, and deployment. "
-    "I build work that reads like a product: define the problem, build reliable pipelines, and ship an interface people can use."
+    "I build work like a product: define the problem, build reliable pipelines, and ship an interface people can use."
 )
 
+# References (ONLY Prof. Valentino as requested)
 REFERENCES = [
     {
         "name": "Mr. Valentino Megale, PhD",
         "role": "CEO, Softcare Studios",
         "email": "valentinomegale@hotmail.it",
         "linkedin": "https://www.linkedin.com/in/valentinomegale",
-    },
-    {
-        "name": "Mr. Alessandro Villadei",
-        "role": "CEO, Avor Consulting",
-        "email": "villadei.alessandro@gmail.com",
-        "linkedin": None,
-    },
-    {
-        "name": "Mr. Leandro Guerra",
-        "role": "Head of Data Science & Analytical Platforms, EMAP",
-        "email": "info@outspokenmarket.com",
-        "linkedin": None,
-    },
+    }
 ]
 
 EXPERIENCE = [
@@ -428,45 +370,43 @@ PROJECTS = [
             "Reported MAE, Relative MAE, and R² to keep evaluation transparent and interpretable.",
         ],
         "stack": ["Python (Advanced)", "Random Forest", "SHAP", "Explainable AI", "Streamlit"],
-        "repo": None,
-        "live": "https://fao-shap-dashboard-fyfzpqshuzcpfvz79m6xio.streamlit.app/#d166e061",
+        "link_label": "Visit app",
+        "link_url": "https://fao-shap-dashboard-fyfzpqshuzcpfvz79m6xio.streamlit.app/#d166e061",
         "tags": ["XAI", "SHAP", "ML", "Streamlit"],
     },
     {
         "title": "Rome Airbnb Analysis and Price Prediction",
-        "one_liner": "EDA + interactive mapping + SVM classifier to categorize listing prices in Rome.",
+        "one_liner": "EDA + mapping + SVM classifier to categorize listing prices in Rome.",
         "summary": (
-            "Analyzed publicly available Rome Airbnb listings to understand pricing patterns. "
-            "Built a dashboard to visualize hotspots and trained an SVM classifier to predict price categories."
+            "Analyzed Rome Airbnb listings to understand pricing patterns and hotspots. "
+            "Built a dashboard and trained an SVM classifier to predict price categories."
         ),
         "highlights": [
             "Room type + neighborhood emerged as primary price drivers.",
-            "Premium zones (Centro Storico, Trastevere) highlighted using map-based insights.",
-            "Stakeholder-friendly dashboard with clear visuals and variable explanations.",
+            "Premium zones highlighted using map-based insights.",
+            "Dashboard designed for stakeholder-friendly storytelling.",
         ],
         "stack": ["Python (Advanced)", "EDA", "SVM", "Streamlit", "Data Storytelling"],
-        "repo": None,
-        "live": "https://rome-airbnb-app-bsr6lkugduccvbrwmjfksk.streamlit.app/",
+        "link_label": "Visit app",
+        "link_url": "https://rome-airbnb-app-bsr6lkugduccvbrwmjfksk.streamlit.app/",
         "tags": ["EDA", "Maps", "ML", "Streamlit"],
     },
     {
-        "title": "Smoking Project | BI + NLP + LLM Analytics",
-        "one_liner": "Dashboards + data science to analyze smoking prevalence, drivers, and trends (BI + NLP/LLM).",
+        "title": "Smoking Analysis (AI + LLM + NLP)",
+        "one_liner": "Data science + LLM/NLP exploration for smoking prevalence insights and decision support.",
         "summary": (
-            "A research and analytics project built like a decision engine: clean data pipelines, BI-style KPIs, "
-            "and an applied NLP/LLM workflow. I worked with OpenAI-style prompt patterns (keys, tokens, rate limits, "
-            "and safe secret handling) to turn evidence and project notes into concise stakeholder-ready summaries. "
-            "The outcome is not only charts, but explainable narratives: what’s changing, where, and why."
+            "Project exploring smoking prevalence analysis with a data-science workflow and LLM/NLP components. "
+            "Focus includes analysis design, narrative insight delivery, and building blocks for AI-assisted reporting."
         ),
         "highlights": [
-            "Pipeline-ready structure: ingest → clean → model → dashboard.",
-            "BI mindset: clear KPIs, segmentation, and trend monitoring for stakeholders.",
-            "LLM/NLP experience: prompt patterns, token budgeting, and secret-handling practices (implementation-ready).",
+            "A-to-Z workflow mindset: data → analysis → insight narrative → future deployment paths.",
+            "Exploring LLM/NLP patterns to turn signals into usable summaries and explanations.",
+            "Built as a foundation for a BI-style, decision-support dashboard.",
         ],
-        "stack": ["Python", "Pandas", "Streamlit", "NLP", "LLM/NLP", "BI Dashboards"],
-        "repo": None,   # no GitHub link
-        "live": None,
-        "tags": ["BI", "NLP", "LLM", "Dashboards"],
+        "stack": ["Python (Advanced)", "NLP", "LLMs", "Analytics", "BI mindset"],
+        "link_label": "View repository",
+        "link_url": "https://github.com/Harshal3233/Smoking-analysis-Ai-llm-Nlp/tree/main",
+        "tags": ["NLP", "LLM", "Analytics"],
     },
 ]
 
@@ -480,15 +420,7 @@ SKILLS = {
         "EDA", "K-Means", "Regression", "Random Forest", "SVM", "Neural Networks",
         "Data Management", "Model Building & Deployment", "Predictive Analysis",
     ],
-    "Tools & Platforms": [
-        "Streamlit",
-        "Power BI Desktop",
-        "VS Code",
-        "Jupyter Notebook",
-        "Jira",
-        "MS Excel",
-        "Google Workspace",
-    ],
+    "Tools & Platforms": ["Streamlit", "VS Code", "Jupyter Notebook", "Jira", "MS Excel", "Google Workspace"],
     "Web & Design": ["HTML", "CSS", "JavaScript", "Figma", "Interactive Dashboards"],
 }
 
@@ -700,25 +632,19 @@ def project_card(p, technical: bool):
     st.markdown(f"<div class='card-sub'>{p['one_liner']}</div>", unsafe_allow_html=True)
 
     if technical:
-        st.markdown(pills(p.get("stack", [])), unsafe_allow_html=True)
+        st.markdown(pills(p["stack"]), unsafe_allow_html=True)
         st.markdown("**Summary**")
-        st.write(p.get("summary", ""))
-
-        highlights = p.get("highlights", [])
-        if highlights:
-            st.markdown("**Highlights**")
-            st.write("\n".join([f"- {x}" for x in highlights]))
+        st.write(p["summary"])
+        st.markdown("**Highlights**")
+        st.write("\n".join([f"- {x}" for x in p["highlights"]]))
     else:
-        st.write(p.get("summary", ""))
-        st.markdown(pills([*p.get("tags", [])], accent=True), unsafe_allow_html=True)
+        st.write(p["summary"])
+        st.markdown(pills([*p["tags"]], accent=True), unsafe_allow_html=True)
 
-    if p.get("live"):
-        st.markdown(
-            f"<div class='visit small-muted'><a href='{p['live']}' target='_blank'>Visit app ↗</a> "
-            f"<span style='color:{BRAND['muted']};'>({p['live']})</span></div>",
-            unsafe_allow_html=True,
-        )
-
+    st.markdown(
+        f"<div class='visit small-muted'><a href='{p['link_url']}' target='_blank'>{p['link_label']} ↗</a></div>",
+        unsafe_allow_html=True,
+    )
     st.markdown("</div>", unsafe_allow_html=True)
 
 def note_card(note):
@@ -751,39 +677,39 @@ def note_card(note):
         st.markdown(f"<div class='codebox'><pre>{note['code']}</pre></div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-# -------------------------------------------------
-# Apply sidebar project filters
-# -------------------------------------------------
-def project_matches(p: dict) -> bool:
-    # text search
-    q = project_search.strip().lower()
-    if q:
-        blob = " ".join([
-            p.get("title", ""),
-            p.get("one_liner", ""),
-            p.get("summary", ""),
-            " ".join(p.get("tags", [])),
-            " ".join(p.get("stack", [])),
-        ]).lower()
-        if q not in blob:
-            return False
+def delivery_radar():
+    labels = [
+        "SQL", "Data (CSV/API)", "Cleaning", "EDA", "Feature Eng",
+        "Modeling", "Evaluation", "Explainability", "Dashboard UI", "Deployment"
+    ]
+    scores = np.array([8, 8, 7, 8, 7, 8, 7, 8, 9, 8], dtype=float)
 
-    # tag filter
-    if tag_filter:
-        tags = set([t.lower() for t in p.get("tags", [])])
-        wanted = set([t.lower() for t in tag_filter])
-        if tags.isdisjoint(wanted):
-            return False
+    angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False)
+    scores_loop = np.concatenate([scores, [scores[0]]])
+    angles_loop = np.concatenate([angles, [angles[0]]])
 
-    return True
+    fig = plt.figure(figsize=(5.0, 3.8), dpi=140)
+    ax = plt.subplot(111, polar=True)
 
-FILTERED_PROJECTS = [p for p in PROJECTS if project_matches(p)]
+    ax.plot(angles_loop, scores_loop, linewidth=2)
+    ax.fill(angles_loop, scores_loop, alpha=0.12)
+
+    ax.set_xticks(angles)
+    ax.set_xticklabels(labels, fontsize=7)
+    ax.set_yticks([2, 4, 6, 8, 10])
+    ax.set_yticklabels(["2", "4", "6", "8", "10"], fontsize=7)
+    ax.set_ylim(0, 10)
+    ax.grid(alpha=0.25)
+    ax.set_title("A→Z Data Science Delivery", fontsize=10, pad=12, fontweight="bold")
+    fig.tight_layout()
+    return fig
 
 # -------------------------------------------------
 # HERO (top)
 # -------------------------------------------------
 st.markdown("<div class='hero'>", unsafe_allow_html=True)
 left, right = st.columns([0.72, 0.28], vertical_alignment="top")
+
 with left:
     st.markdown(f"<div class='hero-title'>{PROFILE['name']}</div>", unsafe_allow_html=True)
     st.markdown(f"<div class='hero-tag'>{PROFILE['tagline']}</div>", unsafe_allow_html=True)
@@ -801,10 +727,12 @@ with left:
 """,
         unsafe_allow_html=True,
     )
+
 with right:
-    st.markdown("<div class='kpi'><div class='kpi-label'>Deployed Apps</div><div class='kpi-value'>2</div></div>", unsafe_allow_html=True)
-    st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='kpi'><div class='kpi-label'>GitHub Projects</div><div class='kpi-value'>3</div></div>", unsafe_allow_html=True)
+    st.markdown(
+        "<div class='kpi'><div class='kpi-label'>Deployed Apps / Projects</div><div class='kpi-value'>3</div></div>",
+        unsafe_allow_html=True,
+    )
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
     st.markdown("<div class='kpi'><div class='kpi-label'>Core Stack</div><div class='kpi-value'>Python + ML</div></div>", unsafe_allow_html=True)
     st.markdown("<div style='height:0.7rem;'></div>", unsafe_allow_html=True)
@@ -822,37 +750,51 @@ with right:
 """,
         unsafe_allow_html=True,
     )
+
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Career Dashboard Tabs
+# Explore My Work (Header + graph + tabs)
 # -------------------------------------------------
-section("Career Dashboard", "Two views: recruiter-friendly and technical deep-dive.")
-tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
+section("Explore My Work", "Two views: recruiter-friendly and technical deep-dive.")
 
-# Default focus behavior (soft)
-if focus == "Technical-first":
-    # Show a small hint (Streamlit tabs cannot be programmatically selected reliably)
-    st.info("Tip: You selected Technical-first in the sidebar. Open the **Technical View** tab for the deep dive.")
+hleft, hright = st.columns([0.62, 0.38], vertical_alignment="top")
+with hleft:
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.markdown("<div class='card-title'>End-to-end delivery mindset</div>", unsafe_allow_html=True)
+    st.write(
+        "A full data science project isn’t just modeling. It’s a pipeline: data acquisition → analysis → modeling → "
+        "explainability → dashboard UX → deployment. This dashboard shows that delivery flow clearly."
+    )
+    st.markdown(pills(["SQL", "EDA", "Modeling", "Explainability", "Dashboard UX", "Deployment"], accent=True), unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+with hright:
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.pyplot(delivery_radar(), clear_figure=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+tab_recruiter, tab_technical = st.tabs(["Recruiter View", "Technical View"])
 
 # =========================
 # Recruiter View
 # =========================
 with tab_recruiter:
-    c1, c2, c3, c4 = st.columns(4)
+    # Auto-adjust layout: keep it clean
+    c1, c2, c3, c4 = st.columns([1.05, 1.05, 1.05, 0.95])
 
     with c1:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Snapshot</div>", unsafe_allow_html=True)
-        st.write("AI Engineer with deployed dashboards and ML projects (Explainability + classification).")
-        st.markdown(pills(SKILLS["Recruiter Snapshot"], accent=True), unsafe_allow_html=True)
+        st.write("AI Engineer with deployed dashboards and ML projects (Explainability + classification + NLP exploration).")
+        st.markdown(pills(["AI Engineer", "Python", "SQL", "Streamlit", "SHAP", "SVM", "NLP"], accent=True), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c2:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Projects</div>", unsafe_allow_html=True)
-        st.write("Deployed apps + research-led analytics (BI/NLP/LLM experience).")
-        st.markdown(pills(["2 Deployed Apps", "Streamlit", "ML", "BI/NLP"], accent=True), unsafe_allow_html=True)
+        st.write("3 projects: 2 deployed Streamlit apps + 1 AI/LLM/NLP analytics repository.")
+        st.markdown(pills(["3 Projects", "2 Deployed Apps", "1 Repo"], accent=True), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c3:
@@ -860,27 +802,23 @@ with tab_recruiter:
         st.markdown("<div class='card-title'>Contact</div>", unsafe_allow_html=True)
         st.write(f"Email: {PROFILE['email']}")
         st.write(f"Phone: {PROFILE['phone']}")
-        st.markdown(f"<div class='visit small-muted'><a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn ↗</a></div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div class='visit small-muted'><a href='{PROFILE['linkedin']}' target='_blank'>LinkedIn ↗</a></div>",
+            unsafe_allow_html=True,
+        )
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c4:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
-        st.markdown("<div class='card-title'>References</div>", unsafe_allow_html=True)
-
-        for r in REFERENCES:
-            st.markdown(f"**{r['name']}**")
-            st.markdown(f"<div class='small-muted'>{r['role']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='small-muted'>✉️ {r['email']}</div>", unsafe_allow_html=True)
-
-            if r["linkedin"]:
-                st.markdown(
-                    f"<div class='visit small-muted'>🔗 "
-                    f"<a href='{r['linkedin']}' target='_blank'>LinkedIn ↗</a></div>",
-                    unsafe_allow_html=True,
-                )
-
-            st.markdown("<div style='height:0.5rem;'></div>", unsafe_allow_html=True)
-
+        st.markdown("<div class='card-title'>Reference</div>", unsafe_allow_html=True)
+        r = REFERENCES[0]
+        st.markdown(f"**{r['name']}**")
+        st.markdown(f"<div class='small-muted'>{r['role']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='small-muted'>✉️ {r['email']}</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div class='visit small-muted'>🔗 <a href='{r['linkedin']}' target='_blank'>LinkedIn ↗</a></div>",
+            unsafe_allow_html=True,
+        )
         st.markdown("</div>", unsafe_allow_html=True)
 
     section("Experience", "Impact-first narrative.")
@@ -889,27 +827,9 @@ with tab_recruiter:
         timeline_item(e, technical=False)
     timeline_close()
 
-    section("Projects", "Simple summaries with app links (filtered from sidebar).")
-    if not FILTERED_PROJECTS:
-        st.warning("No projects match your filters. Try clearing search/tags in the sidebar.")
-    for p in FILTERED_PROJECTS:
+    section("Projects", "Simple summaries with links.")
+    for p in PROJECTS:
         project_card(p, technical=False)
-
-    section("Education & Industry Exposure", "Where skills were acquired and tested.")
-    for ed in EDUCATION:
-        st.markdown("<div class='card'>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-title'>{ed['title']}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-sub'>{ed['meta']}</div>", unsafe_allow_html=True)
-        st.write("\n".join([f"- {b}" for b in ed["bullets"]]))
-        st.markdown("</div>", unsafe_allow_html=True)
-
-    for ex in INDUSTRY_EXCURSIONS:
-        st.markdown("<div class='card'>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-title'>{ex['title']}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-sub'>{ex['meta']}</div>", unsafe_allow_html=True)
-        st.write("\n".join([f"- {b}" for b in ex["bullets"]]))
-        st.markdown(pills(ex["tags"], accent=True), unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
 
     section("Languages", None)
     st.markdown("<div class='card'>", unsafe_allow_html=True)
@@ -920,32 +840,21 @@ with tab_recruiter:
 # Technical View
 # =========================
 with tab_technical:
-    section("Exploration Tracks", "What’s being explored right now (LLMs, orchestration, deployment patterns).")
+    section("Exploration Tracks", "LLMs, orchestration, deployment patterns.")
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.write("\n".join([f"- {x}" for x in EXPLORING]))
     st.markdown(pills(["Oracle Labs", "IBM Labs", "Embeddings", "LLMs", "Deployment Patterns"], accent=True), unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
-    section("Experience Timeline", "Problem → Approach → Outcome (technical dashboard).")
+    section("Experience Timeline", "Problem → Approach → Outcome.")
     timeline_open()
     for e in EXPERIENCE:
         timeline_item(e, technical=True)
     timeline_close()
 
-    section("Projects", "Full detail: stack, highlights, and links (filtered from sidebar).")
-    if not FILTERED_PROJECTS:
-        st.warning("No projects match your filters. Try clearing search/tags in the sidebar.")
-    for p in FILTERED_PROJECTS:
+    section("Projects", "Full detail: stack, highlights, and links.")
+    for p in PROJECTS:
         project_card(p, technical=True)
-
-    section("Industry Excursions", "Lab exposure and technical discussions.")
-    for ex in INDUSTRY_EXCURSIONS:
-        st.markdown("<div class='card'>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-title'>{ex['title']}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-sub'>{ex['meta']}</div>", unsafe_allow_html=True)
-        st.write("\n".join([f"- {b}" for b in ex["bullets"]]))
-        st.markdown(pills(ex["tags"], accent=True), unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
 
     section("Skills", "Toolbox view.")
     cols = st.columns(3)
@@ -957,17 +866,9 @@ with tab_technical:
             st.markdown(pills(SKILLS[k]), unsafe_allow_html=True)
             st.markdown("</div>", unsafe_allow_html=True)
 
-    section("Notes", "Technical notes (explainability + deployment + architecture).")
+    section("Notes", "Explainability + deployment + architecture.")
     for note in BLOG_NOTES:
         note_card(note)
-
-    section("Education", "Formal learning + labs.")
-    for ed in EDUCATION:
-        st.markdown("<div class='card'>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-title'>{ed['title']}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='card-sub'>{ed['meta']}</div>", unsafe_allow_html=True)
-        st.write("\n".join([f"- {b}" for b in ed["bullets"]]))
-        st.markdown("</div>", unsafe_allow_html=True)
 
     section("Contact", None)
     st.markdown("<div class='card'>", unsafe_allow_html=True)

@@ -29,7 +29,7 @@ BRAND = {
 st.markdown(
     f"""
 <style>
-/* Prevent horizontal scrollbars (the "2 sliders" issue) */
+/* Prevent horizontal scrollbars */
 html, body {{ overflow-x: hidden; }}
 * {{ box-sizing: border-box; }}
 a, p, div, span {{ overflow-wrap: anywhere; word-break: break-word; }}
@@ -285,7 +285,6 @@ ABOUT = (
     "I build work like a product: define the problem, build reliable pipelines, and ship an interface people can use."
 )
 
-# ONLY Prof. Valentino (as requested)
 REFERENCE = {
     "name": "Mr. Valentino Megale, PhD",
     "role": "CEO, Softcare Studios",
@@ -366,9 +365,11 @@ PROJECTS = [
             "Reported MAE, Relative MAE, and R² to keep evaluation transparent and interpretable.",
         ],
         "stack": ["Python (Advanced)", "Random Forest", "SHAP", "Explainable AI", "Streamlit"],
+        "tags": ["XAI", "SHAP", "ML", "Streamlit"],
         "link_label": "Visit app",
         "link_url": "https://fao-shap-dashboard-fyfzpqshuzcpfvz79m6xio.streamlit.app/#d166e061",
-        "tags": ["XAI", "SHAP", "ML", "Streamlit"],
+        "extra_links": [],
+        "deep_dive": None,
     },
     {
         "title": "Rome Airbnb Analysis and Price Prediction",
@@ -383,40 +384,55 @@ PROJECTS = [
             "Dashboard designed for stakeholder-friendly storytelling.",
         ],
         "stack": ["Python (Advanced)", "EDA", "SVM", "Streamlit", "Data Storytelling"],
+        "tags": ["EDA", "Maps", "ML", "Streamlit"],
         "link_label": "Visit app",
         "link_url": "https://rome-airbnb-app-bsr6lkugduccvbrwmjfksk.streamlit.app/",
-        "tags": ["EDA", "Maps", "ML", "Streamlit"],
+        "extra_links": [],
+        "deep_dive": None,
     },
     {
-        "title": "Smoking Analysis (AI + LLM + NLP)",
-        "one_liner": "Data science + LLM/NLP exploration for smoking prevalence insights and decision support.",
+        "title": "Smoking Intelligence Dashboard (Version 2)",
+        "one_liner": "End-to-end analytics product: ingestion → NLP/LLM insights → dashboard UX → cloud deployment.",
         "summary": (
-            "Project exploring smoking prevalence analysis with a data-science workflow and LLM/NLP components. "
-            "Focus includes analysis design, narrative insight delivery, and building blocks for AI-assisted reporting."
+            "A production-style dashboard focused on smoking prevalence intelligence. Built with a data-product mindset: "
+            "structured inputs, analysis views, narrative insights, and deployment stability for real-world access."
         ),
         "highlights": [
-            "A-to-Z workflow mindset: data → analysis → insight narrative → future deployment paths.",
-            "Exploring LLM/NLP patterns to turn signals into usable summaries and explanations.",
-            "Built as a foundation for a BI-style decision-support dashboard.",
+            "Designed as an intelligence dashboard: trends, segmentation, and insight narratives.",
+            "NLP/LLM layer focus: summarization-style outputs and explainable insights (decision-support approach).",
+            "Deployed on Railway for an always-on web app experience (production-style hosting).",
         ],
-        "stack": ["Python (Advanced)", "NLP", "LLMs", "Analytics", "BI mindset"],
-        "link_label": "View repository",
-        "link_url": "https://github.com/Harshal3233/Smoking-analysis-Ai-llm-Nlp/tree/main",
-        "tags": ["NLP", "LLM", "Analytics"],
+        "stack": ["Python (Advanced)", "SQL + CSV workflows", "NLP/LLM patterns", "Dashboard UX", "Deployment (Railway)"],
+        "tags": ["NLP", "LLM", "Analytics", "Deployment"],
+        "link_label": "Visit app",
+        "link_url": "https://smoking-intelligence-dash-production.up.railway.app/",
+        "extra_links": [
+            ("View repository", "https://github.com/Harshal3233/Smoking-analysis-Ai-llm-Nlp/tree/main"),
+        ],
+        "deep_dive": {
+            "title": "How it was built (Version 2 build log)",
+            "bullets": [
+                "Problem framing: turn raw smoking prevalence signals into decision-ready views and narratives.",
+                "Pipeline mindset: data ingestion (SQL/CSV) → cleaning → analysis → insight narration → dashboard UX.",
+                "NLP/LLM exploration: making outputs concise, structured, and aligned with the user’s question.",
+                "Deployment: Railway hosting to keep the app always available, closer to a production service than a demo.",
+                "Reliability: dependency control and build stability mindset (pinning + lean requirements).",
+            ],
+        },
     },
 ]
 
 SKILLS = {
     "Recruiter Snapshot": [
         "AI Engineer", "Python (Advanced & Libraries)", "SQL", "Dashboards (Streamlit)",
-        "EDA + Modeling", "Explainability (SHAP)", "Deployment mindset",
+        "EDA + Modeling", "Explainability (SHAP)", "Deployment mindset", "NLP/LLM exploration"
     ],
     "Programming & Data": [
         "Python (Advanced & Libraries)", "Advanced Java", "SQL",
         "EDA", "K-Means", "Regression", "Random Forest", "SVM", "Neural Networks",
         "Data Management", "Model Building & Deployment", "Predictive Analysis",
     ],
-    "Tools & Platforms": ["Streamlit", "VS Code", "Jupyter Notebook", "Jira", "MS Excel", "Google Workspace"],
+    "Tools & Platforms": ["Streamlit", "VS Code", "Jupyter Notebook", "Jira", "MS Excel", "Google Workspace", "Railway"],
     "Web & Design": ["HTML", "CSS", "JavaScript", "Figma", "Interactive Dashboards"],
 }
 
@@ -427,7 +443,7 @@ EDUCATION = [
         "bullets": [
             "Applied learning through Oracle labs: data workflows, database foundations, and practical analytics.",
             "IBM labs exposure: enterprise-style problem framing, tooling practices, and real-world DS workflows.",
-            "Acquired end-to-end LLM deployment concepts: AI agent integration to satisfy user queries with concise, context-driven outputs (LLM + orchestration + evaluation mindset).",
+            "Acquired end-to-end LLM deployment concepts: AI agent integration to satisfy user queries with concise, context-driven outputs.",
         ],
     },
     {
@@ -633,6 +649,11 @@ def project_card(p, technical: bool):
         st.write(p["summary"])
         st.markdown("**Highlights**")
         st.write("\n".join([f"- {x}" for x in p["highlights"]]))
+
+        if p.get("deep_dive"):
+            with st.expander(p["deep_dive"]["title"]):
+                st.write("\n".join([f"- {x}" for x in p["deep_dive"]["bullets"]]))
+
     else:
         st.write(p["summary"])
         st.markdown(pills([*p["tags"]], accent=True), unsafe_allow_html=True)
@@ -641,6 +662,15 @@ def project_card(p, technical: bool):
         f"<div class='visit small-muted'><a href='{p['link_url']}' target='_blank'>{p['link_label']} ↗</a></div>",
         unsafe_allow_html=True,
     )
+
+    # Optional extra links (clean)
+    if p.get("extra_links"):
+        for label, url in p["extra_links"]:
+            st.markdown(
+                f"<div class='visit small-muted'><a href='{url}' target='_blank'>{label} ↗</a></div>",
+                unsafe_allow_html=True,
+            )
+
     st.markdown("</div>", unsafe_allow_html=True)
 
 def note_card(note):
@@ -722,7 +752,7 @@ with right:
 st.markdown("</div>", unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Explore My Work (graph without matplotlib)
+# Explore My Work (built-in chart)
 # -------------------------------------------------
 section("Explore My Work", "Two views: recruiter-friendly and technical deep-dive.")
 
@@ -732,7 +762,7 @@ with hleft:
     st.markdown("<div class='card-title'>End-to-end delivery mindset</div>", unsafe_allow_html=True)
     st.write(
         "A full data science project isn’t just modeling. It’s a pipeline: data acquisition → analysis → modeling → "
-        "explainability → dashboard UX → deployment. This dashboard is built to show the whole delivery chain."
+        "explainability → dashboard UX → deployment. This CV is designed like a product dashboard to show that chain."
     )
     st.markdown(pills(["SQL", "CSV/API", "EDA", "Modeling", "Explainability", "Dashboard UX", "Deployment"], accent=True), unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
@@ -740,8 +770,6 @@ with hleft:
 with hright:
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.markdown("<div class='card-title'>A→Z Project Delivery</div>", unsafe_allow_html=True)
-
-    # Streamlit-native "skill pipeline" chart (no extra libs)
     pipeline = {
         "SQL": 8,
         "CSV/API": 8,
@@ -769,15 +797,15 @@ with tab_recruiter:
     with c1:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Snapshot</div>", unsafe_allow_html=True)
-        st.write("AI Engineer with deployed dashboards and ML projects (Explainability + classification + NLP exploration).")
-        st.markdown(pills(["AI Engineer", "Python", "SQL", "Streamlit", "SHAP", "SVM", "NLP"], accent=True), unsafe_allow_html=True)
+        st.write("AI Engineer with deployed dashboards and ML projects (Explainability + classification + NLP/LLM exploration).")
+        st.markdown(pills(["AI Engineer", "Python", "SQL", "Streamlit", "SHAP", "SVM", "NLP/LLM"], accent=True), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c2:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         st.markdown("<div class='card-title'>Projects</div>", unsafe_allow_html=True)
-        st.write("3 projects: 2 deployed Streamlit apps + 1 AI/LLM/NLP analytics repository.")
-        st.markdown(pills(["3 Projects", "2 Deployed Apps", "1 Repo"], accent=True), unsafe_allow_html=True)
+        st.write("3 projects: 2 deployed Streamlit apps + 1 production-style Railway deployment.")
+        st.markdown(pills(["3 Projects", "Streamlit", "Railway"], accent=True), unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
     with c3:
@@ -834,7 +862,7 @@ with tab_technical:
         timeline_item(e, technical=True)
     timeline_close()
 
-    section("Projects", "Full detail: stack, highlights, and links.")
+    section("Projects", "Full detail: stack, highlights, and build notes.")
     for p in PROJECTS:
         project_card(p, technical=True)
 
